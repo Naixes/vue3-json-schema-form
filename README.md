@@ -288,3 +288,44 @@ createApp(App).mount("#app");
 
 #### jsx
 
+https://github.com/vuejs/jsx-next
+
+Install the plugin with:
+
+```
+npm install @vue/babel-plugin-jsx -D
+```
+
+Then add the plugin to .babelrc:
+
+```
+{
+  "plugins": ["@vue/babel-plugin-jsx"]
+}
+```
+
+优势：ts可以在编译时进行校验（ts不能识别vue文件中导出的类型，都是一个统一的类型），使用灵活（通过函数返回复用html片段等），可以使用指令
+
+#### json-schema
+
+用来定义json数据，校验数据，多端通用
+
+官方草案：json-schema.org
+
+##### ajv
+
+json-schema的js库，https://ajv.js.org/
+
+In JavaScript:
+
+```js
+// or ESM/TypeScript import
+import Ajv from "ajv"
+// Node.js require:
+const Ajv = require("ajv").default
+
+const ajv = new Ajv() // options can be passed, e.g. {allErrors: true}
+const validate = ajv.compile(schema)
+const valid = validate(data)
+if (!valid) console.log(validate.errors)
+```
