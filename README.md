@@ -251,6 +251,7 @@ const img = require('./assets/logo.png') // eslint-disable-line
 const App = defineComponent({
     setup() {
         // 这里还可以写其他的代码
+        // reactive 和 ref 都是用来定义响应式数据的 reactive更推荐去定义复杂的数据类型 ref 更推荐定义基本类型，可以简单的理解为ref是对reactive的二次包装, ref定义的数据访问的时候要多一个.value
         const state = reactive({
             age: 18
         })
@@ -675,5 +676,204 @@ const schema = {
 const validate = ajv.compile(schema)
 console.log(validate({foo: "a", bar: 2})) // false
 console.log(validate.errors) // processed errors
+```
+
+### 组件定义和接口
+
+#### Props
+
+```jsx
+<JsonSchemaForm
+	schema={schema}   
+    value={value}
+    locale={locale}
+    onChange={handleChange}
+    contextRef={someRef}
+    uiSchema={uiSchema}
+></JsonSchemaForm>
+```
+
+##### schema
+
+json schema 对象，用来定义数据，同时也是我们定义表单的依据
+
+##### value
+
+表单的数据结果，你可以从外部改变这个 value，在表单被编辑的时候，会通过`onChange`透出 value
+
+需要注意的是，因为 vue 使用的是可变数据，如果每次数据变化我们都去改变`value`的对象地址，那么会导致整个表单都需要重新渲染，这会导致性能降低。 从实践中来看，我们传入的对象，在内部修改其 field 的值基本不会有什么副作用，所以我们会使用这种方式来进行实现。也就是说，如果`value`是一个对象， 那么从`JsonSchemaForm`内部修改的值，并不会改变`value`对象本身。我们仍然会触发`onChange`，因为可能在表单变化之后，使用者需要进行一些操作。
+
+##### onChange
+
+在表单值有任何变化的时候会触发该回调方法，并把新的值进行返回
+
+##### locale
+
+语言，使用`ajv-i18n`指定错误信息使用的语言
+
+##### contextRef
+
+你需要传入一个 vue3 的`Ref`对象，我们会在这个对象上挂载`doValidate`方法，你可以通过
+
+```jsx
+const yourRef = ref({})
+
+onMounted(() => {
+  yourRef.value.doValidate()
+})
+
+<JsonSchemaForm contextRef={yourRef} />
+```
+
+这样来主动让表单进行校验。
+
+##### uiSchema
+
+对表单的展现进行一些定制，其类型如下：
+
+```ts
+export interface VueJsonSchemaConfig {
+  title?: string
+  descrription?: string
+  component?: string
+  additionProps?: {
+    [key: string]: any
+  }
+  withFormItem?: boolean
+  widget?: 'checkbox' | 'textarea' | 'select' | 'radio' | 'range' | string
+  items?: UISchema | UISchema[]
+}
+export interface UISchema extends VueJsonSchemaConfig {
+  properties?: {
+    [property: string]: UISchema
+  }
+}
+```
+
+#### vue-jss
+
+css in js库基于jss二次开发
+
+`npm i vue-jss jss jss-preset-default`
+
+#### monaco-editor
+
+代码编辑器
+
+```tsx
+/* eslint no-use-before-define: 0 */
+
+import { defineComponent, ref, onMounted, watch, onBeforeUnmount, shallowReadonly, shallowRef } from 'vue'
+
+import * as Monaco from 'monaco-editor'
+
+import type { PropType, Ref } from 'vue'
+import { createUseStyles } from 'vue-jss'
+
+// 返回一个方法
+const useStyles = createUseStyles({
+  container: {
+    border: '1px solid #eee',
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 5
+  },
+  title: {
+    backgroundColor: '#eee',
+    padding: '10px 0',
+    paddingLeft: 20,
+  },
+  code: {
+    flexGrow: 1
+  }
+})
+
+export default defineComponent({
+  props: {
+    code: {
+      type: String as PropType<string>,
+      required: true
+    },
+    onChange: {
+      type: Function as PropType<(value: string, event: Monaco.editor.IModelContentChangedEvent) => void>,
+      required: true
+    },
+    title: {
+      type: String as PropType<string>,
+      required: true
+    }
+  },
+  setup(props) {
+    // must be shallowRef, if not, editor.getValue() won't work
+    const editorRef = shallowRef()
+
+    const containerRef = ref()
+
+    let _subscription: Monaco.IDisposable | undefined
+    let __prevent_trigger_change_event = false // eslint-disable-line
+
+    onMounted(() => {
+      const editor = editorRef.value = Monaco.editor.create(containerRef.value, {
+        value: props.code,
+        language: 'json',
+        formatOnPaste: true,
+        tabSize: 2,
+        minimap: {
+          enabled: false,
+        },
+      })
+
+      _subscription = editor.onDidChangeModelContent((event) => {
+        console.log('--------->', __prevent_trigger_change_event) // eslint-disable-line
+        if (!__prevent_trigger_change_event) { // eslint-disable-line
+          props.onChange(editor.getValue(), event);
+        }
+      });
+    })
+
+    onBeforeUnmount(() => {
+      if (_subscription)
+        _subscription.dispose()
+    })
+
+    watch(() => props.code, (v) => {
+      const editor = editorRef.value
+      const model = editor.getModel()
+      if (v !== model.getValue()) {
+        editor.pushUndoStop();
+        __prevent_trigger_change_event = true // eslint-disable-line
+        // pushEditOperations says it expects a cursorComputer, but doesn't seem to need one.
+        model.pushEditOperations(
+          [],
+          [
+            {
+              range: model.getFullModelRange(),
+              text: v,
+            },
+          ]
+        );
+        editor.pushUndoStop();
+        __prevent_trigger_change_event = false // eslint-disable-line
+      }
+      // if (v !== editorRef.value.getValue()) {
+      //   editorRef.value.setValue(v)
+      // }
+    })
+
+    const classesRef = useStyles()
+
+    return () => {
+
+      const classes = classesRef.value
+
+      return (
+        <div class={classes.container}>
+          <div class={classes.title}><span>{props.title}</span></div>
+          <div class={classes.code} ref={containerRef}></div>
+        </div>
+      )
+    }
+  }
+})
 ```
 

@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <img alt="Vue logo" src="./assets/$logo.png" />
   <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" name="naxies" />
   <h2>{{state.age}}~</h2>
   <!-- 可以不用.value是因为sfc会进行判断当前是不是一个ref -->
@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, computed, watchEffect } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/$HelloWorld.vue'
 
 export default defineComponent({
   name: 'App',

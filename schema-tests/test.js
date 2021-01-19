@@ -49,7 +49,7 @@ schema = {
             // errorMessage: '你又错了！',
             // 区分关键字设置错误信息
             errorMessage: {
-                type: '你传的不是字符串，连字符串都不认识吗！',
+                type: '你传的不是字符串！',
                 testKeyword: '你猜猜你又错哪了！'
             },
         }
