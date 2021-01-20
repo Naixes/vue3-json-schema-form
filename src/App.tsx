@@ -1,4 +1,4 @@
-import { defineComponent, ref, Ref, watchEffect } from "vue";
+import { defineComponent, reactive, ref, Ref, watchEffect } from "vue";
 import {createUseStyles} from 'vue-jss'
 
 import MonacoEditor from './components/MonacoEditor'
@@ -80,14 +80,14 @@ export default defineComponent({
             schemaCode: string,
             dataCode: string,
             uiSchemaCode: string,
-        } = {
+        } = reactive({
             schema: null,
             data: {},
             uiSchema: {},
             schemaCode: '',
             dataCode: '',
             uiSchemaCode: '',
-        }
+        })
 
         watchEffect(() => {
           const index = selectedRef.value
@@ -99,6 +99,11 @@ export default defineComponent({
           demo.dataCode = jsonToString(d.default)
           demo.uiSchemaCode = jsonToString(d.uiSchema)
         })
+
+        const handleChange = (v: any) => {
+          demo.data = v
+          demo.dataCode = jsonToString(v)
+        }
 
         // 工厂函数
         const handleCodeChange = (
@@ -167,7 +172,11 @@ export default defineComponent({
                     </div>
                   </div>
                   <div class={classes.form}>
-                    <SchemaForm />
+                    <SchemaForm
+                      schema={demo.schema}
+                      onChange={handleChange}
+                      value={demo.data}
+                    />
                     {/* <SchemaForm
                       schema={demo.schema!}
                       uiSchema={demo.uiSchema!}

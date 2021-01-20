@@ -25,7 +25,71 @@
 
 ### 一些概念
 
-#### vue3中的tsAPI
+#### vue3中的API
+
+##### sfc的新的开发方式-0000
+
+还未合并请查看最新https://github.com/vuejs/rfcs/pull/227
+
+```vue
+<script setup>
+  // imported components are also directly usable in template
+  import Foo from './Foo.vue'
+  import { ref } from 'vue'
+
+  // write Composition API code just like in a normal setup()
+  // but no need to manually return everything
+  const count = ref(0)
+  const inc = () => {
+    count.value++
+  }
+</script>
+
+<template>
+  <Foo :count="count" @click="inc" />
+</template>
+```
+
+<details open="" style="box-sizing: border-box; display: block; margin-top: 0px; margin-bottom: 16px; color: rgb(36, 41, 46); font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: border-box; display: list-item; cursor: pointer;">Compiled Output</summary><div class="highlight highlight-text-html-basic" style="box-sizing: border-box; margin-bottom: 16px;"><pre style="box-sizing: border-box; font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, monospace; font-size: 13.6px; margin-top: 0px; margin-bottom: 0px; overflow-wrap: normal; padding: 16px; overflow: auto; line-height: 1.45; background-color: var(--color-bg-tertiary); border-radius: 6px; word-break: normal;"><span class="pl-kos" style="box-sizing: border-box;">&lt;</span><span class="pl-ent" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity-tag);">script</span> <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">setup</span><span class="pl-kos" style="box-sizing: border-box;">&gt;</span>
+  <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">import</span> <span class="pl-v" style="box-sizing: border-box; color: var(--color-prettylights-syntax-variable);">Foo</span> <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">from</span> <span class="pl-s" style="box-sizing: border-box; color: var(--color-prettylights-syntax-string);">'./Foo.vue'</span>
+  <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">import</span> <span class="pl-kos" style="box-sizing: border-box;">{</span> <span class="pl-s1" style="box-sizing: border-box;">ref</span> <span class="pl-kos" style="box-sizing: border-box;">}</span> <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">from</span> <span class="pl-s" style="box-sizing: border-box; color: var(--color-prettylights-syntax-string);">'vue'</span>
+
+  <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">export</span> <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">default</span> <span class="pl-kos" style="box-sizing: border-box;">{</span>
+    <span class="pl-en" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity);">setup</span><span class="pl-kos" style="box-sizing: border-box;">(</span><span class="pl-kos" style="box-sizing: border-box;">)</span> <span class="pl-kos" style="box-sizing: border-box;">{</span>
+      <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">const</span> <span class="pl-s1" style="box-sizing: border-box;">count</span> <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">=</span> <span class="pl-en" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity);">ref</span><span class="pl-kos" style="box-sizing: border-box;">(</span><span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">1</span><span class="pl-kos" style="box-sizing: border-box;">)</span>
+      <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">const</span> <span class="pl-en" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity);">inc</span> <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">=</span> <span class="pl-kos" style="box-sizing: border-box;">(</span><span class="pl-kos" style="box-sizing: border-box;">)</span> <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">=&gt;</span> <span class="pl-kos" style="box-sizing: border-box;">{</span>
+        <span class="pl-s1" style="box-sizing: border-box;">count</span><span class="pl-kos" style="box-sizing: border-box;">.</span><span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">value</span><span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">++</span>
+      <span class="pl-kos" style="box-sizing: border-box;">}</span>
+
+      <span class="pl-k" style="box-sizing: border-box; color: var(--color-prettylights-syntax-keyword);">return</span> <span class="pl-kos" style="box-sizing: border-box;">{</span>
+        Foo<span class="pl-kos" style="box-sizing: border-box;">,</span> <span class="pl-c" style="box-sizing: border-box; color: var(--color-prettylights-syntax-comment);">// see note below</span>
+        count<span class="pl-kos" style="box-sizing: border-box;">,</span>
+        inc<span class="pl-kos" style="box-sizing: border-box;">,</span>
+      <span class="pl-kos" style="box-sizing: border-box;">}</span>
+    <span class="pl-kos" style="box-sizing: border-box;">}</span><span class="pl-kos" style="box-sizing: border-box;">,</span>
+  <span class="pl-kos" style="box-sizing: border-box;">}</span>
+<span class="pl-kos" style="box-sizing: border-box;">&lt;/</span><span class="pl-ent" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity-tag);">script</span><span class="pl-kos" style="box-sizing: border-box;">&gt;</span>
+
+<span class="pl-kos" style="box-sizing: border-box;">&lt;</span><span class="pl-ent" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity-tag);">template</span><span class="pl-kos" style="box-sizing: border-box;">&gt;</span>
+  <span class="pl-kos" style="box-sizing: border-box;">&lt;</span><span class="pl-ent" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity-tag);">Foo</span> <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">:count</span>="<span class="pl-s" style="box-sizing: border-box; color: var(--color-prettylights-syntax-string);">count</span>" <span class="pl-c1" style="box-sizing: border-box; color: var(--color-prettylights-syntax-constant);">@click</span>="<span class="pl-s" style="box-sizing: border-box; color: var(--color-prettylights-syntax-string);">inc</span>" /&gt;
+<span class="pl-kos" style="box-sizing: border-box;">&lt;/</span><span class="pl-ent" style="box-sizing: border-box; color: var(--color-prettylights-syntax-entity-tag);">template</span><span class="pl-kos" style="box-sizing: border-box;">&gt;</span></pre></div><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 16px;"><strong style="box-sizing: border-box; font-weight: 600;">Note:</strong><span>&nbsp;</span>the SFC compiler also extracts binding metadata from<span>&nbsp;</span><code style="box-sizing: border-box; font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, monospace; font-size: 13.6px; padding: 0.2em 0.4em; margin: 0px; background-color: var(--color-markdown-code-bg); border-radius: 6px;">&lt;script setup&gt;</code><span>&nbsp;</span>and use it during template compilation. This is why the template can use<span>&nbsp;</span><code style="box-sizing: border-box; font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, monospace; font-size: 13.6px; padding: 0.2em 0.4em; margin: 0px; background-color: var(--color-markdown-code-bg); border-radius: 6px;">Foo</code><span>&nbsp;</span>as a component here even though it's returned from<span>&nbsp;</span><code style="box-sizing: border-box; font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, monospace; font-size: 13.6px; padding: 0.2em 0.4em; margin: 0px; background-color: var(--color-markdown-code-bg); border-radius: 6px;">setup()</code><span>&nbsp;</span>instead of registered via<span>&nbsp;</span><code style="box-sizing: border-box; font-family: SFMono-Regular, Consolas, &quot;Liberation Mono&quot;, Menlo, monospace; font-size: 13.6px; padding: 0.2em 0.4em; margin: 0px; background-color: var(--color-markdown-code-bg); border-radius: 6px;">components</code><span>&nbsp;</span>option.</p></details>
+
+
+
+**Declaring Props and Emits**
+
+```vue
+<script setup>
+  import { defineProps, defineEmit } from 'vue'
+
+  // expects props options
+  const props = defineProps({
+    foo: String,
+  })
+  // expects emits options
+  const emit = defineEmits(['update', 'delete'])
+</script>
+```
 
 ##### component接口
 
@@ -876,4 +940,158 @@ export default defineComponent({
   }
 })
 ```
+
+### 展示项目
+
+app.tsx
+
+```tsx
+import { defineComponent, reactive, ref, Ref, watchEffect } from "vue";
+import {createUseStyles} from 'vue-jss'
+
+import MonacoEditor from './components/MonacoEditor'
+import demos from './demos'
+import SchemaForm from '../lib'
+
+// TODO：在lib中export
+type Schema = any
+type UISchema = any
+
+function jsonToString(data: any) {
+    return JSON.stringify(data, null, 2)
+}
+
+// 样式
+const useStyles = createUseStyles({
+    ...
+})
+
+export default defineComponent({
+    setup() {
+        // 记录当前选中的demo
+        const selectedRef: Ref<number> = ref(0)
+
+        const demo: {
+            schema: Schema | null,
+            data: any,
+            uiSchema: UISchema | null,
+            schemaCode: string,
+            dataCode: string,
+            uiSchemaCode: string,
+        } = reactive({
+            schema: null,
+            data: {},
+            uiSchema: {},
+            schemaCode: '',
+            dataCode: '',
+            uiSchemaCode: '',
+        })
+
+        watchEffect(() => {
+          const index = selectedRef.value
+          const d = demos[index]
+          demo.schema = d.schema
+          demo.data = d.default
+          demo.uiSchema = d.uiSchema
+          demo.schemaCode = jsonToString(d.schema)
+          demo.dataCode = jsonToString(d.default)
+          demo.uiSchemaCode = jsonToString(d.uiSchema)
+        })
+
+        const handleChange = (v: any) => {
+          demo.data = v
+          demo.dataCode = jsonToString(v)
+        }
+
+        // 工厂函数
+        const handleCodeChange = (
+          field: 'schema' | 'data' | 'uiSchema',
+          value: string
+        ) => {
+            let json: any
+            try {
+                json = JSON.parse(value)
+                demo[field] = json
+                ;(demo as any)[`${field}Code`] = value
+            } catch (err){
+                console.log(err);
+            }
+        }
+        const handleSchemaChange = (v: string) => handleCodeChange('schema', v)
+        const handleDataChange = (v: string) => handleCodeChange('data', v)
+        const handleUISchemaChange = (v: string) => handleCodeChange('uiSchema', v)
+
+        const classesRef = useStyles()
+
+        return () => {
+            const classes = classesRef.value
+            const selected = selectedRef.value
+
+            return (        // <StyleThemeProvider>
+              // <VJSFThemeProvider theme={theme as any}>
+              <div class={classes.container}>
+                <div class={classes.menu}>
+                  <h1>Vue3 JsonSchema Form</h1>
+                  <div>
+                    {demos.map((demo, index) => (
+                      <button
+                        class={{
+                          [classes.menuButton]: true,
+                          [classes.menuSelected]: index === selected,
+                        }}
+                        onClick={() => (selectedRef.value = index)}
+                      >
+                        {demo.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div class={classes.content}>
+                  <div class={classes.code}>
+                    <MonacoEditor
+                      code={demo.schemaCode}
+                      class={classes.codePanel}
+                      onChange={handleSchemaChange}
+                      title="Schema"
+                    />
+                    <div class={classes.uiAndValue}>
+                      <MonacoEditor
+                        code={demo.uiSchemaCode}
+                        class={classes.codePanel}
+                        onChange={handleUISchemaChange}
+                        title="UISchema"
+                      />
+                      <MonacoEditor
+                        code={demo.dataCode}
+                        class={classes.codePanel}
+                        onChange={handleDataChange}
+                        title="Value"
+                      />
+                    </div>
+                  </div>
+                  <div class={classes.form}>
+                    <SchemaForm
+                      schema={demo.schema}
+                      onChange={handleChange}
+                      value={demo.data}
+                    />
+                    {/* <SchemaForm
+                      schema={demo.schema!}
+                      uiSchema={demo.uiSchema!}
+                      onChange={handleChange}
+                      contextRef={methodRef}
+                      value={demo.data}
+                    /> */}
+                  </div>
+                </div>
+              </div>
+              // </VJSFThemeProvider>
+              // </StyleThemeProvider>
+            )
+        }
+    }
+})
+```
+
+### 组件开发
 
