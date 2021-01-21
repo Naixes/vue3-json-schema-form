@@ -15,7 +15,12 @@ module.exports = {
   },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    // 关闭了一些严格的规则
+    '@typescript-eslint/no-use-before-define': 'off',
+    'no-prototype-builtins': 'off',
+    // 不允许any
+    '@typescript-eslint/no-explicit-any': 'off',
   },
   overrides: [
     {

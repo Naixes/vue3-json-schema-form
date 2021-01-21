@@ -941,6 +941,18 @@ export default defineComponent({
 })
 ```
 
+插件：monaco-editor-webpack-plugin
+
+```js
+  const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+
+module.exports = {
+  chainWebpack(config) {
+      config.plugin('monaco').use(new MonacoWebpackPlugin())
+  },
+}
+```
+
 ### 展示项目
 
 app.tsx
@@ -1094,4 +1106,110 @@ export default defineComponent({
 ```
 
 ### 组件开发
+
+SchemaItem：分发不同type的schema
+
+fields/xxxField：具体的实现
+
+#### 简单节点的渲染
+
+```vue
+<template>
+    <input type="text" :value="value" @input="handleChange" />
+</template>
+
+<script lang='ts' setup>
+import {defineProps} from 'vue'
+
+import {FieldPropsDefine, Schema} from '../types'
+
+// 直接使用FieldPropsDefine会报错
+const props = defineProps({...FieldPropsDefine})
+
+const handleChange = (e: any) => {
+    props.onChange(e.target.value)
+}
+</script>
+```
+
+#### 复杂节点渲染
+
+##### 对象
+
+不要循环引用组件，难以查找错误，使用插件提醒`npm i -D circular-dependency-plugin`
+
+使用provide解决循环引用的问题
+
+源码：apiInject.ts
+
+```ts
+// /packages/runtime-core/src/apiInject.ts
+import { isFunction } from '@vue/shared'
+import { currentInstance } from './component'
+import { currentRenderingInstance } from './componentRenderUtils'
+import { warn } from './warning'
+
+export interface InjectionKey<T> extends Symbol {}
+
+export function provide<T>(key: InjectionKey<T> | string | number, value: T) {
+	// 判断是否处于组件的渲染流程，即只能在setup中使用
+    if (!currentInstance) {
+        if (__DEV__) {
+            warn(`provide() can only be used inside setup().`)
+        }
+    } else {
+        let provides = currentInstance.provides
+        // by default an instance inherits its parent's provides object
+        // but when it needs to provide values of its own, it creates its
+        // own provides object using parent provides object as prototype.
+        // this way in `inject` we can simply look up injections from direct
+        // parent and let the prototype chain do the work.
+        // 默认情况下，实例继承其父对象的Provides对象
+        // 但是当需要提供自己的值时，它会使用父提供对象作为原型创建对象
+        // 以这种方式，在`inject`中，我们可以直接从直接父对象查询中查找注入从而让原型链起作用
+        const parentProvides =
+              currentInstance.parent && currentInstance.parent.provides
+        if (parentProvides === provides) {
+            provides = currentInstance.provides = Object.create(parentProvides)
+        }
+        // TS doesn't allow symbol as index type
+        provides[key as string] = value
+    }
+}
+
+...
+export function inject(
+  key: InjectionKey<any> | string,
+  defaultValue?: unknown,
+  treatDefaultAsFactory = false
+) {
+  // fallback to `currentRenderingInstance` so that this can be called in
+  // a functional component
+  const instance = currentInstance || currentRenderingInstance
+  if (instance) {
+    // #2400
+    // to support `app.use` plugins,
+    // fallback to appContext's `provides` if the intance is at root
+    const provides =
+      instance.parent == null
+        ? instance.vnode.appContext && instance.vnode.appContext.provides
+        : instance.parent.provides
+
+    if (provides && (key as string | symbol) in provides) {
+      // TS doesn't allow symbol as index type
+      return provides[key as string]
+    } else if (arguments.length > 1) {
+      return treatDefaultAsFactory && isFunction(defaultValue)
+        ? defaultValue()
+        : defaultValue
+    } else if (__DEV__) {
+      warn(`injection "${String(key)}" not found.`)
+    }
+  } else if (__DEV__) {
+    warn(`inject() can only be used inside setup() or functional components.`)
+  }
+}
+```
+
+##### 数组
 
