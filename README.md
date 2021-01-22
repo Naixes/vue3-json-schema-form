@@ -1211,5 +1211,31 @@ export function inject(
 }
 ```
 
+优化：封装通用逻辑
+
 ##### 数组
+
+```tsx
+/**
+ * 三种情况
+ * 
+ * 都是同一种类型
+ * {
+ *      items: {type: 'string'}
+ * }
+ * 固定长度，分别是哪些类型
+ * {
+ *      items: [
+ *          {type: 'string'},
+ *          {type: 'numer'}
+ *      ]
+ * }
+ * enum表示可选项
+ * {
+ *      items: {type: 'string', enum: ['1', '2']}
+ * }
+ */
+```
+
+###### 固定长度的数组渲染
 

@@ -1,21 +1,16 @@
 import {DefineComponent, defineComponent, ExtractPropTypes, inject} from 'vue'
 
-import {FieldPropsDefine, Schema, SchemaTypes} from '../types'
-import { SchemaFormContextKey } from '../context'
+import {CommonFieldType, FieldPropsDefine, Schema, SchemaTypes} from '../types'
+import { SchemaFormContextKey, useVJSFContext } from '../context'
 import { isObject } from '../../lib/utils'
-
-// 借助ExtractPropTypes可以将对象转换成类型，源码中已经加过了
-type SchemaItemDefine = DefineComponent<typeof FieldPropsDefine>
 
 export default defineComponent({
     name: 'ObjectField',
     props: FieldPropsDefine,
     setup(props, {slots, emit, attrs}) {
-        const context: {SchemaItem: SchemaItemDefine} | undefined = inject(SchemaFormContextKey)
-
-        if(!context) {
-            throw Error('SchemaForm shuold bu used')
-        }
+        
+        // 获取SchemaForm提供的SchemaItem
+        const context = useVJSFContext()
 
         const handleObjectFieldChange = (k: string, v: any) => {
             const value: any = isObject(props.value) ? props.value : {}

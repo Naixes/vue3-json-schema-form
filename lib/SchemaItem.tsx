@@ -2,8 +2,9 @@ import {computed, defineComponent} from 'vue'
 
 import {FieldPropsDefine, SchemaTypes} from './types'
 import StringField from './fields/StringField.vue'
-import NumberField from './fields/NumberField'
+import NumberField from './fields/NumberField.vue'
 import ObjectField from './fields/ObjectField'
+import ArrayField from './fields/ArrayField'
 import {retrieveSchema} from './utils'
 
 // 负责根据类型分发给不同的组件
@@ -35,6 +36,9 @@ export default defineComponent({
                     break;
                 case SchemaTypes.OBJECT:
                     Component = ObjectField
+                    break;
+                case SchemaTypes.ARRAY:
+                    Component = ArrayField
                     break;
                 default:
                     console.error(`${type} is not supported`);
