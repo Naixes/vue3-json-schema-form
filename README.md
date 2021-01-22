@@ -351,6 +351,36 @@ const App = defineComponent({
 createApp(App).mount("#app");
 ```
 
+##### watch
+
+```js
+// watching a getter
+const state = reactive({ count: 0 })
+watch(
+  () => state.count,
+  (count, prevCount) => {
+    /* ... */
+  }
+)
+
+// directly watching a ref
+const count = ref(0)
+watch(count, (count, prevCount) => {
+  /* ... */
+})
+
+// A watcher can also watch multiple sources at the same time using an array
+const firstName = ref('');
+const lastName = ref('');
+
+watch([firstName, lastName], (newValues, prevValues) => {
+  console.log(newValues, prevValues);
+})
+
+firstName.value = "John"; // logs: ["John",""] ["", ""]
+lastName.value = "Smith"; // logs: ["John", "Smith"] ["John", ""]
+```
+
 #### jsx
 
 https://github.com/vuejs/jsx-next
@@ -1219,7 +1249,7 @@ export function inject(
 /**
  * 三种情况
  * 
- * 都是同一种类型
+ * 单类型数组，默认没有长度限制都是同一种类型
  * {
  *      items: {type: 'string'}
  * }
@@ -1237,5 +1267,9 @@ export function inject(
  */
 ```
 
-###### 固定长度的数组渲染
+固定长度的数组渲染
+
+单类型数组渲染
+
+包含可选项数组渲染
 

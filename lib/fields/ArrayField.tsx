@@ -4,6 +4,7 @@ import {FieldPropsDefine, Schema, SchemaTypes} from '../types'
 import { SchemaFormContextKey, useVJSFContext } from '../context'
 import { isObject } from '../utils'
 import { createUseStyles } from 'vue-jss'
+import SelectionWidget from '../widgets/Selection'
 
 /**
  * 三种情况
@@ -179,8 +180,21 @@ export default defineComponent({
                         ></SchemaItem>
                     </ArrayItemWrapper>
                 ))
+            }else {
+                // 包含列表项
+                const enumOptions = (schema as any).items.enum
+                const options = enumOptions.map((e: any) => ({
+                    key: e,
+                    value: e
+                }))
+                return (
+                    <SelectionWidget
+                        onChange={props.onChange}
+                        value={props.value}
+                        options={options}
+                    ></SelectionWidget>
+                )
             }
-            return <div>111</div>
         }
     }
 })
