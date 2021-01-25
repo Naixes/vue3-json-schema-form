@@ -33,7 +33,7 @@ export default defineComponent({
         )
         return () => {
             const {options} = props
-            console.log('options', options);
+            // console.log('options', options);
             
             return (
                 <select multiple={true} v-model={currentValueRef.value}>

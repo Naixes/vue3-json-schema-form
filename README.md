@@ -1273,3 +1273,151 @@ export function inject(
 
 包含可选项数组渲染
 
+#### 单元测试
+
+##### jest
+
+默认配置：
+
+```js
+// jest.config.js
+module.exports = {
+  // cli给的jest默认配置
+  preset: "@vue/cli-plugin-unit-jest/presets/typescript-and-babel",
+  transform: {
+    "^.+\\.vue$": "vue-jest"
+  }
+};
+
+```
+
+查看源码[vue-cli](https://github.com/vuejs/vue-cli)/[packages](https://github.com/vuejs/vue-cli/tree/dev/packages)/**@vue**/中是所有使用到的插件
+
+```js
+// cli-plugin-unit-jest/presets/typescript-and-babel，在基础配置上添加的配置
+const deepmerge = require('deepmerge')
+const defaultTsPreset = require('../typescript/jest-preset')
+
+module.exports = deepmerge(
+  defaultTsPreset,
+  {
+    globals: {
+      // 配置在ts编译之后还要进行babel编译
+      'ts-jest': {
+        babelConfig: true
+      }
+    }
+  }
+)
+
+// '../typescript/jest-preset'中查看defaultTsPreset
+const deepmerge = require('deepmerge')
+const defaultPreset = require('../default/jest-preset')
+
+module.exports = deepmerge(
+  defaultPreset,
+  {
+    // 单元测试引入模块可编译的后缀名，会增加在默认配置后面按照顺序寻找，所以如果有同名的vue文件并且没有写扩展名的情况下则会引入vue而不是tsx
+    moduleFileExtensions: ['ts', 'tsx'],
+    // 使用'ts-jest'编译ts和tsx代码
+    transform: {
+      '^.+\\.tsx?$': require.resolve('ts-jest')
+    }
+  }
+)
+
+// '../default/jest-preset'中查看defaultPreset
+module.exports = {
+  // 解析文件的路径，可以省略后缀名
+  moduleFileExtensions: [
+    'js',
+    'jsx',
+    'json',
+    // tell Jest to handle *.vue files
+    'vue'
+  ],
+  // 配置各个文件类型的编译方式
+  transform: {
+    // process *.vue files with vue-jest
+    '^.+\\.vue$': require.resolve('vue-jest'),
+    '.+\\.(css|styl|less|sass|scss|jpg|jpeg|png|svg|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+    require.resolve('jest-transform-stub'),
+    '^.+\\.jsx?$': require.resolve('babel-jest')
+  },
+  // 忽略编译的文件
+  transformIgnorePatterns: ['/node_modules/'],
+  // 文件映射，@映射到src
+  // support the same @ -> src alias mapping in source code
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'
+  },
+  // 快照测试
+  // serializer for snapshots
+  snapshotSerializers: [
+    'jest-serializer-vue'
+  ],
+  // 配置测试文件的路径
+  testMatch: [
+    '**/tests/unit/**/*.spec.[jt]s?(x)',
+    '**/__tests__/*.[jt]s?(x)'
+  ],
+  // https://github.com/facebook/jest/issues/6766
+  testURL: 'http://localhost/',
+  // --watch使用的插件
+  watchPlugins: [
+    require.resolve('jest-watch-typeahead/filename'),
+    require.resolve('jest-watch-typeahead/testname')
+  ]
+}
+```
+
+###### 描述性api
+
+describe（套件），it（在describe中使用），test（独立使用，用的少）
+
+###### 断言api
+
+jest.io/docs
+
+###### 预设和清理
+
+beforeEach/afterEach
+
+beforeAll/afterAll
+
+###### 异步测试
+
+三种方法：
+
+- 结束时执行：done()
+
+- 返回Promise
+- async和await
+
+###### 测试部分用例
+
+通过-t命令测试部分it中包含-t信息的用例`npm run test:unit -- -t=multi`
+
+##### vue-test-utils
+
+官方提供的测试工具库
+
+##### 单元测试指标
+
+```ts
+// -- 表示npm的参数，后一个表示测试的参数
+npm run test:unit -- --coerage
+```
+
+Stmts：语句覆盖率，可能多行，数值和Lines相近
+
+Lines：行覆盖率
+
+Branch：分支覆盖率（if-else）
+
+Funcs：函数覆盖率
+
+应用类型的测试只测试核心代码，一般到达50，60就可以了
+
+
+
