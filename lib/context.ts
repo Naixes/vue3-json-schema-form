@@ -1,13 +1,13 @@
 import { inject } from "vue"
 
-import { CommonFieldType } from "./types"
+import { CommonFieldType, Theme } from "./types"
 
 // 存储所有的 provide key
 export const SchemaFormContextKey = Symbol()
 
 // 获取SchemaForm提供的SchemaItem
 export function useVJSFContext() {
-    const context: {SchemaItem: CommonFieldType} | undefined = inject(SchemaFormContextKey)
+    const context: {theme: Theme, SchemaItem: CommonFieldType} | undefined = inject(SchemaFormContextKey)
     
     if(!context) {
         throw Error('SchemaForm shuold bu used')

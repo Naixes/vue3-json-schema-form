@@ -1,10 +1,9 @@
-import {DefineComponent, defineComponent, ExtractPropTypes, inject, PropType} from 'vue'
+import {defineComponent, PropType} from 'vue'
 
-import {FieldPropsDefine, Schema, SchemaTypes} from '../types'
-import { SchemaFormContextKey, useVJSFContext } from '../context'
-import { isObject } from '../utils'
+import {FieldPropsDefine, Schema} from '../types'
+import { useVJSFContext } from '../context'
 import { createUseStyles } from 'vue-jss'
-import SelectionWidget from '../widgets/Selection'
+// import SelectionWidget from '../widgets/$Selection'
 
 /**
  * 三种情况
@@ -141,6 +140,7 @@ export default defineComponent({
 
         return () => {
             const {SchemaItem} = context
+            const {SelectionWidget} = context.theme.wedgets
             const {schema, rootSchema, value} = props
             // 判断是否是固定长度
             const isMultiType = Array.isArray(schema.items)

@@ -1,10 +1,10 @@
-import {defineComponent} from 'vue'
+import SelectionWidget from './Selection'
 
-export default defineComponent({
-    name: 'theme',
-    setup(props, {slots, emit, attrs}) {
-        return () => {
-            return <div>111</div>
-        }
+export default {
+    wedgets: {
+        SelectionWidget,
+        TextWedget: SelectionWidget,
+        NumberWedget: SelectionWidget,
+
     }
-})
+}

@@ -69,3 +69,36 @@ export const FieldPropsDefine = {
 
 // 借助ExtractPropTypes可以将对象转换成类型，源码中已经加过了
 export type CommonFieldType = DefineComponent<typeof FieldPropsDefine>
+
+const CommonWidgetPropsDefine = {
+    value: {},
+    onChange: {
+        type: Function as PropType<(v: any) => void>,
+        required: true
+    },
+}
+
+// 如果返回类型里面有很多any，是由于重载过多，可以试试以下写法
+// export type CommonWidgetType = DefineComponent<typeof FieldPropsDefine, {}, {}>
+export type CommonWidgetType = DefineComponent<typeof CommonWidgetPropsDefine>
+
+const SelectionWidgetPropsDefine = {
+  ...CommonWidgetPropsDefine,
+  options: {
+      type: Array as PropType<{
+          key: string,
+          value: any
+      }[]>,
+      required: true
+  },
+}
+export type SelectionWidgetType = DefineComponent<typeof SelectionWidgetPropsDefine>
+
+// 主题定义
+export interface Theme {
+  wedgets: {
+    SelectionWidget: SelectionWidgetType,
+    TextWidget: CommonWidgetType,
+    NumberWidget: CommonWidgetType,
+  }
+}

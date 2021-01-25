@@ -1,6 +1,6 @@
 import {defineComponent, PropType, provide, reactive} from 'vue'
 
-import {Schema} from './types'
+import {Schema, Theme} from './types'
 import SchemaItem from './SchemaItem'
 import {SchemaFormContextKey} from './context'
 
@@ -17,6 +17,10 @@ export default defineComponent({
         onChange: {
             type: Function as PropType<(v: any) => void>,
             required: true,
+        },
+        theme: {
+            type: Object as PropType<Theme>,
+            required: true,
         }
     },
     setup(props, {slots, emit, attrs}) {
@@ -24,9 +28,11 @@ export default defineComponent({
             props.onChange(v)
         }
 
-        // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
         const context: any = reactive({
-            SchemaItem
+            // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
+            SchemaItem,
+            // 向下提供theme
+            theme: props.theme,
         })
         // 向子节点提供SchemaItem组件
         provide(SchemaFormContextKey, context)
