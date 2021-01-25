@@ -3,12 +3,16 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 // 检查循环引用的插件
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
+const isLib = process.env.TYPE === 'lib'
+
 module.exports = {
   configureWebpack(config) {
-    console.log(config.plugins);
+    // console.log(config.plugins);
   },
   chainWebpack(config) {
-      config.plugin('monaco').use(new MonacoWebpackPlugin()),
-      config.plugin('circular').use(new CircularDependencyPlugin())
+    if(!isLib) {
+      config.plugin('monaco').use(new MonacoWebpackPlugin())
+    }
+    config.plugin('circular').use(new CircularDependencyPlugin())
   },
 }

@@ -1419,5 +1419,65 @@ Funcs：函数覆盖率
 
 应用类型的测试只测试核心代码，一般到达50，60就可以了
 
+### 主题系统
 
+样式主题：国内使用较多，通过变量来修改样式，编译时指定，不可以动态改变需要加载不同的样式文件
+
+css in js方案：国外使用较多通过provide提供主题样式，运行时指定，可以动态改变
+
+相比较于样式主题css in js方案有以下几点：
+
+- 交互可以改变
+- 组件产出多样
+- 统一接口之后，其余内容自定义，可以基于不同的组件库来实现
+
+#### 组件单独打包
+
+默认主题和核心部分分开打包减少强依赖，当用户同时使用了别的主题，默认主题就变成了无用代码
+
+vue-cli提供的lib方式打包（无需html入口，不会打包vue），指定两个入口就可以单独打包自己的代码，要注意两个部分的代码不要相互引用
+
+https://cli.vuejs.org/zh/guide/build-targets.html#%E6%9E%84%E5%BB%BA%E7%9B%AE%E6%A0%87
+
+清除dist目录：`npm i rimraf -D`
+
+```json
+// win--这个写法环境变量判断有问题，打包出多余文件，使用跨平台设置
+"build:core": "set TYPE=lib && vue-cli-service build --target lib --name index --no-clean lib/index.ts",
+"build:theme": "set TYPE=lib && vue-cli-service build --target lib --name theme-default/index --no-clean lib/theme-default/index.tsx",
+"build": "rimraf dist && npm run build:core && npm run build:theme",
+
+// mac
+"build:core": "TYPE=lib vue-cli-service build --target lib --name index --no-clean lib/index.ts",
+"build:theme": "TYPE=lib vue-cli-service build --target lib --name theme-default/index --no-clean lib/theme-default/index.tsx",
+"build": "rimraf dist && npm run build:core && npm run build:theme",
+
+// cross-env跨平台设置
+"build:core": "cross-env TYPE=lib vue-cli-service build --target lib --name index --no-clean lib/index.ts",
+"build:theme": "cross-env TYPE=lib vue-cli-service build --target lib --name theme-default/index --no-clean lib/theme-default/index.tsx",
+"build": "rimraf dist && npm run build:core && npm run build:theme",
+```
+
+区分环境
+
+```js
+// vue.config.js
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+// 检查循环引用的插件
+const CircularDependencyPlugin = require('circular-dependency-plugin')
+
+const isLib = process.env.TYPE === 'lib'
+
+module.exports = {
+  configureWebpack(config) {
+    console.log(config.plugins);
+  },
+  chainWebpack(config) {
+    if(!isLib) {
+      config.plugin('monaco').use(new MonacoWebpackPlugin())
+    }
+    config.plugin('circular').use(new CircularDependencyPlugin())
+  },
+}
+```
 
