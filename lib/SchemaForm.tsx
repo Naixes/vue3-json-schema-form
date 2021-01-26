@@ -18,10 +18,11 @@ export default defineComponent({
             type: Function as PropType<(v: any) => void>,
             required: true,
         },
-        theme: {
-            type: Object as PropType<Theme>,
-            required: true,
-        }
+        // 已改为从theme.tsx中获取
+        // theme: {
+        //     type: Object as PropType<Theme>,
+        //     required: true,
+        // }
     },
     setup(props, {slots, emit, attrs}) {
         const handleChange = (v:any) => {
@@ -31,8 +32,8 @@ export default defineComponent({
         const context: any = reactive({
             // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
             SchemaItem,
-            // 向下提供theme
-            theme: props.theme,
+            // 向下提供theme，已改为从theme.tsx中获取
+            // theme: props.theme,
         })
         // 向子节点提供SchemaItem组件
         provide(SchemaFormContextKey, context)

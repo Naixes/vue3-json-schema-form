@@ -1,7 +1,7 @@
 import SelectionWidget from './Selection'
 
 export default {
-    wedgets: {
+    widgets: {
         SelectionWidget,
         TextWedget: SelectionWidget,
         NumberWedget: SelectionWidget,

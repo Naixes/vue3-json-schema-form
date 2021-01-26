@@ -96,7 +96,7 @@ export type SelectionWidgetType = DefineComponent<typeof SelectionWidgetPropsDef
 
 // 主题定义
 export interface Theme {
-  wedgets: {
+  widgets: {
     SelectionWidget: SelectionWidgetType,
     TextWidget: CommonWidgetType,
     NumberWidget: CommonWidgetType,

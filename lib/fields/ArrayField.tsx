@@ -1,9 +1,10 @@
 import {defineComponent, PropType} from 'vue'
+import { createUseStyles } from 'vue-jss'
 
 import {FieldPropsDefine, Schema} from '../types'
 import { useVJSFContext } from '../context'
-import { createUseStyles } from 'vue-jss'
 // import SelectionWidget from '../widgets/$Selection'
+import {getWidget} from '../theme'
 
 /**
  * 三种情况
@@ -85,7 +86,7 @@ const ArrayItemWrapper = defineComponent({
                         <button onClick={handleUp} class={classes.action}>上移</button>
                         <button onClick={handleDown} class={classes.action}>下移</button>
                     </div>
-                    {/* slots.default返回一个函数 */}
+                    {/* slots.default是一个函数 */}
                     <div class={classes.content}>{slots.default && slots.default()}</div>
                 </div>
             )
@@ -138,9 +139,13 @@ export default defineComponent({
             props.onChange(arrValue)
         }
 
+        const SelectionWidgetRef = getWidget('SelectionWidget')
+
         return () => {
             const {SchemaItem} = context
-            const {SelectionWidget} = context.theme.wedgets
+            // 改为从theme.tsx中获取
+            // const {SelectionWidget} = context.theme.widgets
+            const SelectionWidget = SelectionWidgetRef.value
             const {schema, rootSchema, value} = props
             // 判断是否是固定长度
             const isMultiType = Array.isArray(schema.items)

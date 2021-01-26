@@ -3,7 +3,7 @@ import {createUseStyles} from 'vue-jss'
 
 import MonacoEditor from './components/MonacoEditor'
 import demos from './demos'
-import SchemaForm from '../lib'
+import SchemaForm, { ThemeProvider } from '../lib'
 import themeDefault from '../lib/theme-default/index'
 
 // TODO：在lib中export
@@ -173,12 +173,15 @@ export default defineComponent({
                     </div>
                   </div>
                   <div class={classes.form}>
-                    <SchemaForm
-                      theme={themeDefault as any}
-                      schema={demo.schema}
-                      onChange={handleChange}
-                      value={demo.data}
-                    />
+                    <ThemeProvider theme={themeDefault as any}>
+                      <SchemaForm
+                        // 已改为从theme.tsx的ThemeProvider中获取
+                        // theme={themeDefault as any}
+                        schema={demo.schema}
+                        onChange={handleChange}
+                        value={demo.data}
+                      />
+                    </ThemeProvider>
                     {/* <SchemaForm
                       schema={demo.schema!}
                       uiSchema={demo.uiSchema!}

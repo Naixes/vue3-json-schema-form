@@ -279,7 +279,7 @@ export default defineComponent({
       ageRef.value += 1
     }, 1000)
 
-    // computed
+    // computed返回ComputedRef（和Ref同类型）
     const computedAgeRef = computed(() => {
       return ageRef.value + 2
     })
@@ -1448,6 +1448,7 @@ https://cli.vuejs.org/zh/guide/build-targets.html#%E6%9E%84%E5%BB%BA%E7%9B%AE%E6
 "build": "rimraf dist && npm run build:core && npm run build:theme",
 
 // mac
+// 设置环境变量
 "build:core": "TYPE=lib vue-cli-service build --target lib --name index --no-clean lib/index.ts",
 "build:theme": "TYPE=lib vue-cli-service build --target lib --name theme-default/index --no-clean lib/theme-default/index.tsx",
 "build": "rimraf dist && npm run build:core && npm run build:theme",
@@ -1473,6 +1474,7 @@ module.exports = {
     console.log(config.plugins);
   },
   chainWebpack(config) {
+    // 检查是否是lib模式打包
     if(!isLib) {
       config.plugin('monaco').use(new MonacoWebpackPlugin())
     }
@@ -1481,3 +1483,10 @@ module.exports = {
 }
 ```
 
+#### 拆分主题
+
+拆分主题到theme-default定义主题并通过provide从SchemaForm向下提供
+
+#### 解耦
+
+将provide逻辑解耦到theme.tsx，好处是theme-default也可以引入ThemeProvider使用，它也可以被其他地方引用包装，这也是纯组件化的设计理念，通过组件的拆分组合来增加功能，便于后期维护。
