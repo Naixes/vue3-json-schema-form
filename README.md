@@ -1547,11 +1547,15 @@ export default defineComponent({
 })
 ```
 
+#### 迁移其他的Widget
 
+##### mergeProps
 
+关闭vue编译器merge相同名称属性的默认行为
 
+##### Controled Input功能
 
-
+即输入值和显示的值不一样
 
 
 

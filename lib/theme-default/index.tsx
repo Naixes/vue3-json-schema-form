@@ -1,4 +1,5 @@
-import SelectionWidget from './Selection'
+import SelectionWidget from './SelectionWidget'
+import TextWidget from './TextWidget'
 
 // 临时创建的CommonWidge解决ts定义问题
 import { defineComponent } from 'vue'
@@ -14,7 +15,7 @@ const CommonWidge: CommonWidgetType = defineComponent({
 export default {
     widgets: {
         SelectionWidget,
-        TextWedget: CommonWidge,
+        TextWidget,
         NumberWedget: CommonWidge,
 
     }
