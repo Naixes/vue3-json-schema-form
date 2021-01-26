@@ -173,6 +173,8 @@ export default defineComponent({
                     </div>
                   </div>
                   <div class={classes.form}>
+                    {/* TODO：解决类型问题 */}
+                    {/* 类型不兼容，改了很多，都是同一个类型定义，不知道问题在哪 */}
                     <ThemeProvider theme={themeDefault as any}>
                       <SchemaForm
                         // 已改为从theme.tsx的ThemeProvider中获取

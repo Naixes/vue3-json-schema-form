@@ -1,3 +1,5 @@
+// 共用代码，可以在theme-default和core中通用
+
 import { DefineComponent, PropType } from "vue"
 
 export enum SchemaTypes {
@@ -70,19 +72,20 @@ export const FieldPropsDefine = {
 // 借助ExtractPropTypes可以将对象转换成类型，源码中已经加过了
 export type CommonFieldType = DefineComponent<typeof FieldPropsDefine>
 
-const CommonWidgetPropsDefine = {
+export const CommonWidgetPropsDefine = {
     value: {},
     onChange: {
         type: Function as PropType<(v: any) => void>,
         required: true
     },
-}
+} as const
 
 // 如果返回类型里面有很多any，是由于重载过多，可以试试以下写法
+// defineComponent返回的类型十分复杂，是因为没有舍弃老的通过options声明组件的方式
 // export type CommonWidgetType = DefineComponent<typeof FieldPropsDefine, {}, {}>
 export type CommonWidgetType = DefineComponent<typeof CommonWidgetPropsDefine>
 
-const SelectionWidgetPropsDefine = {
+export const SelectionWidgetPropsDefine = {
   ...CommonWidgetPropsDefine,
   options: {
       type: Array as PropType<{
@@ -91,14 +94,24 @@ const SelectionWidgetPropsDefine = {
       }[]>,
       required: true
   },
-}
+} as const
 export type SelectionWidgetType = DefineComponent<typeof SelectionWidgetPropsDefine>
+
+// 主题相关
+
+export enum SelectionWidgetNames {
+  SelectionWidget = 'SelectionWidget'
+}
+export enum CommonWidgetNames {
+  TextWidget = 'TextWidget',
+  NumberWidget = 'NumberWidget'
+}
 
 // 主题定义
 export interface Theme {
   widgets: {
-    SelectionWidget: SelectionWidgetType,
-    TextWidget: CommonWidgetType,
-    NumberWidget: CommonWidgetType,
+    [SelectionWidgetNames.SelectionWidget]: SelectionWidgetType,
+    [CommonWidgetNames.TextWidget]: CommonWidgetType,
+    [CommonWidgetNames.NumberWidget]: CommonWidgetType,
   }
 }
