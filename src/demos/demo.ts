@@ -1,8 +1,9 @@
 export default {
     name: 'Demo',
     schema: {
-        type: 'string',
+        type: 'number',
     },
     uiSchema: {},
-    default: 'naixes'
+    // default: 'naixes'
+    default: 1
 }

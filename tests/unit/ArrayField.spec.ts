@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import { NumberField, StringField, ArrayField, SelectionWedget } from "../../lib";
+import { NumberField, StringField, ArrayField, SelectionWidget } from "../../lib";
 import TestSchemaForm from './utils/TestComponent'
 
 describe("ArrayField", () => {
@@ -70,7 +70,7 @@ describe("ArrayField", () => {
         });
 
         const arrField = wrapper.findComponent(ArrayField)
-        const optFields = arrField.findComponent(SelectionWedget)
+        const optFields = arrField.findComponent(SelectionWidget)
         // 渲染组件
         expect(optFields.exists()).toBeTruthy()
     });

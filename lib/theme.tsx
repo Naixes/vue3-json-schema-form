@@ -29,6 +29,7 @@ const ThemeProvider = defineComponent({
 
 export function getWidget<T extends SelectionWidgetNames | CommonWidgetNames>(name: T) {
     const contextRef: ComputedRef<Theme> | undefined = inject<ComputedRef<Theme>>(THEME_PROVIDER_KEY)
+    
     if(!contextRef) {
         throw new Error('vjsf theme required')
     }

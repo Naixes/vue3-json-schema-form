@@ -10,6 +10,7 @@ export default defineComponent({
         // 可以做一些额外的事情再调用父级的方法
         const handleChange = (v: string) => {
             // ...
+            // props.onChange(v + '1')
             props.onChange(v)
         }
 
