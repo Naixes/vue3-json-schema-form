@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 
-import JsonSchemaForm, { NumberField, StringField, ArrayField, SelectionWedget } from "../../lib";
+import { NumberField, StringField, ArrayField, SelectionWedget } from "../../lib";
+import TestSchemaForm from './utils/TestComponent'
 
 describe("ArrayField", () => {
     beforeEach(() => {
@@ -8,7 +9,7 @@ describe("ArrayField", () => {
 
     // 单一类型数组
     it("renders multi type fields", async() => {
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema: {
                 type: 'array',
@@ -32,7 +33,7 @@ describe("ArrayField", () => {
 
     // 固定长度数组
     it("renders single type fields", async() => {
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema: {
                 type: 'array',
@@ -54,7 +55,7 @@ describe("ArrayField", () => {
 
     // 包含列表项数组
     it("renders option type fields", async() => {
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema: {
                 type: 'array',

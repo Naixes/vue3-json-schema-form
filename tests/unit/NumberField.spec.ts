@@ -1,11 +1,12 @@
 import { mount } from "@vue/test-utils";
 
-import JsonSchemaForm, { NumberField } from "../../lib";
+import { NumberField } from "../../lib";
+import TestSchemaForm from './utils/TestComponent'
 
 describe("NumberField", () => {
   it("renders correct number field", async() => {
     let value = ''
-    const wrapper = mount(JsonSchemaForm, {
+    const wrapper = mount(TestSchemaForm, {
       props: { 
         schema: {
           type: 'number'

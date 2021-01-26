@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 
-import JsonSchemaForm, { NumberField, StringField, ObjectField } from "../../lib";
+import { NumberField, StringField, ObjectField } from "../../lib";
+import TestSchemaForm from './utils/TestComponent'
 
 describe("ObjectField", () => {
     let schema: any
@@ -20,7 +21,7 @@ describe("ObjectField", () => {
 
     // 能渲染出StringField和NumberField
     it("renders properties to correct field", async() => {
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema,
             value: {},
@@ -38,7 +39,7 @@ describe("ObjectField", () => {
     // 子组件value改变时改变value
     it("should change value when sub field trigger onChange", async() => {
         let value: any = {}
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema,
             value: value,
@@ -60,7 +61,7 @@ describe("ObjectField", () => {
         let value: any = {
             name: 'sin'
         }
-        const wrapper = mount(JsonSchemaForm, {
+        const wrapper = mount(TestSchemaForm, {
         props: { 
             schema,
             value: value,

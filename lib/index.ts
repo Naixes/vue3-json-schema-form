@@ -5,3 +5,5 @@ export {default as ArrayField} from './fields/ArrayField'
 export {default as SelectionWedget} from './widgets/$Selection'
 export {default as ObjectField} from './fields/ObjectField'
 export {default as ThemeProvider} from './theme'
+
+export * from './types'
