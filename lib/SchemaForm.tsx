@@ -1,8 +1,22 @@
-import {defineComponent, PropType, provide, reactive} from 'vue'
+import {defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect} from 'vue'
 
-import {Schema, Theme} from './types'
+import {Schema} from './types'
 import SchemaItem from './SchemaItem'
 import {SchemaFormContextKey} from './context'
+import Ajv, { Options } from 'ajv'
+import {ErrorSchema, validateFormData} from './validator'
+
+interface ContextRef {
+    doValidate: () => {
+        errors: any[],
+        valid: boolean,
+    }
+}
+
+// 要使用ajv-errors需要传入{allErrors: true}
+const defaultAjvOptions: Options = {
+    allErrors: true
+}
 
 export default defineComponent({
     name: 'SchemaForm',
@@ -22,7 +36,18 @@ export default defineComponent({
         // theme: {
         //     type: Object as PropType<Theme>,
         //     required: true,
-        // }
+        // },
+        // 用于校验
+        contextRef: {
+            type: Object as PropType<Ref<ContextRef | undefined>>
+        },
+        ajvOptions: {
+            type: Object as PropType<Options>
+        },
+        local: {
+            type: String,
+            default: 'zh'
+        }
     },
     setup(props, {slots, emit, attrs}) {
         const handleChange = (v:any) => {
@@ -35,6 +60,35 @@ export default defineComponent({
             // 向下提供theme，已改为从theme.tsx中获取
             // theme: props.theme,
         })
+
+        const errorSchemaRef: Ref<ErrorSchema> = shallowRef({})
+
+        const validatorRef: Ref<Ajv> = shallowRef() as any
+        watchEffect(() => {
+          validatorRef.value = new Ajv({
+            ...defaultAjvOptions,
+            ...props.ajvOptions,
+          })
+        })
+
+        // 校验
+        watch(() => props.contextRef, () => {
+            if(props.contextRef) {
+                props.contextRef.value = {
+                    doValidate() {
+                        // 可能返回promise但是这里一定是布尔值
+                        // const valid = validatorRef.value.validate(props.schema, props.value) as boolean
+                        const result = validateFormData(validatorRef.value, props.value, props.schema, props.local)
+                        console.log('result', result);
+                        errorSchemaRef.value = result.errorSchema
+                        return result
+                    }
+                }
+            }
+        }, {
+            immediate: true,
+        })
+
         // 向子节点提供SchemaItem组件
         provide(SchemaFormContextKey, context)
 
@@ -46,6 +100,7 @@ export default defineComponent({
                 schema={schema}
                 value={value}
                 onChange={handleChange}
+                errorSchema={errorSchemaRef.value || {}}
             />
         }
     }

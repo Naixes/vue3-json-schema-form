@@ -126,6 +126,8 @@ export default defineComponent({
 
         const classesRef = useStyles()
 
+        const contextRef = ref()
+
         return () => {
             const classes = classesRef.value
             const selected = selectedRef.value
@@ -182,8 +184,10 @@ export default defineComponent({
                         schema={demo.schema}
                         onChange={handleChange}
                         value={demo.data}
+                        contextRef={contextRef}
                       />
                     </ThemeProvider>
+                    <button onClick={() => contextRef.value.doValidate()}>校验</button>
                     {/* <SchemaForm
                       schema={demo.schema!}
                       uiSchema={demo.uiSchema!}

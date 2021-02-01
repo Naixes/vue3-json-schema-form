@@ -772,6 +772,12 @@ console.log(validate({foo: "a", bar: 2})) // false
 console.log(validate.errors) // processed errors
 ```
 
+### Vue3响应式原理
+
+当一个响应式对象改变后会引起一系列依赖于这个对象的函数被执行，比如watch，watchEffect，render函数等
+
+见：https://github.com/Naixes/vue-next-3.0.0-comment
+
 ### 组件定义和接口
 
 #### Props
@@ -1556,6 +1562,58 @@ export default defineComponent({
 ##### Controlled Input功能
 
 即输入值和显示的值不一样
+
+### 校验系统
+
+jsonSchema本身有校验系统，但是不能满足需求，比如判断两个password是否相等，我们需要增加这部分校验
+
+解析错误信息
+
+```ts
+// 原始错误信息
+[
+    {
+        keyword: 'testKeyword', // errorMessage会覆盖掉真正报错的keyword
+        dataPath: '/testKeywordProperty', // 可以通过路径获取数据
+        schemaPath: '#/properties/testKeywordProperty/testKeyword',
+        params: {},
+        message: '你错了！'
+    }
+]
+```
+
+#### 父组件调用子组件setup函数中的方法
+
+```tsx
+watch(() => props.contextRef, () => {
+    if(props.contextRef) {
+        props.contextRef.value = {
+            doValidate() {
+                console.log('----------------');
+
+                return {
+                    valid: true,
+                    errors: []
+                }
+            }
+        }
+    }
+}, {
+    immediate: true,
+})
+```
+
+#### 转换错误信息
+
+npm i lodash.topath -S
+
+npm i  @types/lodash.topath -D
+
+#### 向下传递
+
+
+
+
 
 
 

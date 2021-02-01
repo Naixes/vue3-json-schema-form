@@ -146,7 +146,7 @@ export default defineComponent({
             // 改为从theme.tsx中获取
             // const {SelectionWidget} = context.theme.widgets
             const SelectionWidget = SelectionWidgetRef.value
-            const {schema, rootSchema, value} = props
+            const {schema, rootSchema, value, errorSchema} = props
             // 判断是否是固定长度
             const isMultiType = Array.isArray(schema.items)
             // 是否有可选项
@@ -163,6 +163,7 @@ export default defineComponent({
                         key={index}
                         value={arrValue}
                         onChange={(v: any) => handleArrayItemChange(v, index)}
+                        errorSchema={errorSchema[index] || {}}
                     ></SchemaItem>
                 ))
             }else if(!isSelect) {
@@ -182,6 +183,7 @@ export default defineComponent({
                             key={index}
                             value={v}
                             onChange={(v: any) => handleArrayItemChange(v, index)}
+                            errorSchema={errorSchema[index] || {}}
                         ></SchemaItem>
                     </ArrayItemWrapper>
                 ))
@@ -197,6 +199,7 @@ export default defineComponent({
                         onChange={props.onChange}
                         value={props.value}
                         options={options}
+                        errors={errorSchema.__errors}
                     ></SelectionWidget>
                 )
             }

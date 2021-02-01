@@ -22,14 +22,14 @@ export default defineComponent({
         
 
         return () => {
-            const {schema, rootSchema, ...rest} = props
+            const {schema, rootSchema, errorSchema, ...rest} = props
             return (
                 // <input
                 //     type="number"
                 //     value={props.value as any}
                 //     onInput={handleChange}
                 // />
-                <NumberWidget {...rest} onChange={handleChange}></NumberWidget>
+                <NumberWidget {...rest} errors={errorSchema.__errors} onChange={handleChange}></NumberWidget>
             )
         }
     }

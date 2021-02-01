@@ -1,6 +1,7 @@
 // 共用代码，可以在theme-default和core中通用
 
 import { DefineComponent, PropType } from "vue"
+import { ErrorSchema } from "./validator"
 
 export enum SchemaTypes {
     'NUMBER' = 'number',
@@ -67,6 +68,10 @@ export const FieldPropsDefine = {
         type: Object as PropType<Schema>,
         required: true,
     },
+    errorSchema: {
+        type: Object as PropType<ErrorSchema>,
+        required: true
+    }
 } as const
 
 // 借助ExtractPropTypes可以将对象转换成类型，源码中已经加过了
@@ -78,6 +83,9 @@ export const CommonWidgetPropsDefine = {
         type: Function as PropType<(v: any) => void>,
         required: true
     },
+    errors: {
+      type: Array as PropType<string[]>,
+    }
 } as const
 
 // 如果返回类型里面有很多any，是由于重载过多，可以试试以下写法

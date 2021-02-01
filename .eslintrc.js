@@ -21,6 +21,8 @@ module.exports = {
     'no-prototype-builtins': 'off',
     // 不允许any
     '@typescript-eslint/no-explicit-any': 'off',
+    // 不允许子组件修改props
+    'vue/no-mutating-props': 'off',
   },
   overrides: [
     {
