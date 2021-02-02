@@ -20,7 +20,12 @@ export default defineComponent({
             const {schema, rootSchema, errorSchema, ...rest} = props
             return (
                 // 这样写会报错，因为写了两个onChange被merge成了数组，这是vue编译器的默认行为，可以手动关闭
-                <TextWidget {...rest} errors={errorSchema.__errors} onChange={handleChange}></TextWidget>
+                <TextWidget
+                    {...rest}
+                    errors={errorSchema.__errors}
+                    onChange={handleChange}
+                    schema={schema}
+                ></TextWidget>
                 // 已提取到theme-default中
                 // <input
                 //     type="text"

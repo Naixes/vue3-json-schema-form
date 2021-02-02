@@ -1,6 +1,8 @@
 import { defineComponent, nextTick } from 'vue'
 import {CommonWidgetPropsDefine, CommonWidgetType} from '../types'
 
+import {withFormItem} from './FormItem'
+
 const TextWidget: CommonWidgetType = defineComponent({
     name: 'TextWidget',
     props: CommonWidgetPropsDefine,
@@ -38,4 +40,4 @@ const TextWidget: CommonWidgetType = defineComponent({
     }
 })
 
-export default TextWidget
+export default withFormItem(TextWidget)

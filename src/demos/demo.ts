@@ -1,6 +1,7 @@
 export default {
     name: 'Demo',
     schema: {
+        title: 'name',
         type: 'string',
     },
     uiSchema: {},

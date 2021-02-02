@@ -84,8 +84,12 @@ export const CommonWidgetPropsDefine = {
         required: true
     },
     errors: {
-      type: Array as PropType<string[]>,
-    }
+        type: Array as PropType<string[]>,
+    },
+    schema: {
+        type: Object as PropType<Schema>,
+        required: true
+    },
 } as const
 
 // 如果返回类型里面有很多any，是由于重载过多，可以试试以下写法

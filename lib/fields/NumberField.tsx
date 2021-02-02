@@ -29,7 +29,12 @@ export default defineComponent({
                 //     value={props.value as any}
                 //     onInput={handleChange}
                 // />
-                <NumberWidget {...rest} errors={errorSchema.__errors} onChange={handleChange}></NumberWidget>
+                <NumberWidget
+                    {...rest}
+                    errors={errorSchema.__errors}
+                    onChange={handleChange}
+                    schema={schema}
+                ></NumberWidget>
             )
         }
     }

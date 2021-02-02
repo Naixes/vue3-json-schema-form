@@ -1611,7 +1611,13 @@ npm i  @types/lodash.topath -D
 
 #### 向下传递
 
+#### 渲染错误信息和label
 
+##### FormItem
+
+##### 抽离FormItem
+
+HOC，解耦
 
 
 
