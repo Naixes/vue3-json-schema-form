@@ -161,7 +161,7 @@ export default defineComponent({
                         rootSchema={rootSchema}
                         schema={s}
                         key={index}
-                        value={arrValue}
+                        value={arrValue[index]}
                         onChange={(v: any) => handleArrayItemChange(v, index)}
                         errorSchema={errorSchema[index] || {}}
                     ></SchemaItem>

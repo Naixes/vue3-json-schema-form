@@ -4,6 +4,7 @@ import toPath from 'lodash.topath'
 const i18n = require('ajv-i18n') // eslint-disable-line
 
 import { Schema } from './types'
+import { isObject } from './utils'
 
 interface TransformedErrorObject {
   name: string
@@ -89,6 +90,7 @@ export function validateFormData(
   formData: any,
   schema: Schema,
   locale = 'zh',
+  customValidate?: (data: any, errors: any) => void,
 ) {
   let validationError = null
   // 校验
@@ -113,9 +115,81 @@ export function validateFormData(
 
   const errorSchema = toErrorSchema(errors)
 
+  if(!customValidate) {
+    return {
+      errors,
+      errorSchema,
+      valid: errors.length === 0,
+    }
+  }
+
+  // 自定义校验
+  /**
+   * {
+   *  obj: {
+   *    a: { b: string},
+   *    __errors: []
+   *  }
+   * }
+   */
+  const proxy = createErrorProxy()
+  customValidate(formData, proxy)
+  // 将proxy和现有的errorSchema进行合并
+  const newErrorSchema = mergeObjects(errorSchema, proxy, true)
   return {
     errors,
-    errorSchema,
+    errorSchema: newErrorSchema,
     valid: errors.length === 0,
   }
+}
+
+// 使用Proxy增加拦截addError存储__errors信息
+// Proxy（代理器） 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming）
+// reciver：总是指向原始的读操作所在的那个对象，一般情况下就是 Proxy 实例
+function createErrorProxy() {
+  const raw = {}
+  return new Proxy(raw, {
+    // errors.xxx.addError('ddd')
+    get(target, key, reciver) {
+      // 拦截addError存储__errors信息
+      if(key === 'addError') {
+        return (msg: string) => {
+          const __errors = Reflect.get(target, '__errors', reciver)
+          if(__errors && Array.isArray(__errors)) {
+            __errors.push(msg)
+          }else {
+            (target as any).__errors = [msg]
+          }
+        }
+      }
+
+      // 获取其他属性（子key），row.obj.a，给子key创建代理
+      const res = Reflect.get(target, key, reciver)
+      if(res === undefined) {
+        const p: any = createErrorProxy()
+        ;(target as any)[key] = p
+        // 不能直接返回res[key]会又进入get造成循环
+        return p
+      }
+      return res
+    }
+  })
+}
+
+// 合并对象
+export function mergeObjects(obj1: any, obj2: any, concatArrays = false) {
+  // Recursively merge deeply nested objects.
+  const acc = Object.assign({}, obj1) // Prevent mutation of source object.
+  return Object.keys(obj2).reduce((acc, key) => {
+    const left = obj1 ? obj1[key] : {},
+      right = obj2[key]
+    if (obj1 && obj1.hasOwnProperty(key) && isObject(right)) {
+      acc[key] = mergeObjects(left, right, concatArrays)
+    } else if (concatArrays && Array.isArray(left) && Array.isArray(right)) {
+      acc[key] = left.concat(right)
+    } else {
+      acc[key] = right
+    }
+    return acc
+  }, acc)
 }

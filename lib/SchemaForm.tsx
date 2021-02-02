@@ -47,6 +47,9 @@ export default defineComponent({
         local: {
             type: String,
             default: 'zh'
+        },
+        customValidate: {
+            type: Function as PropType<(data: any, errors: any) => void>
         }
     },
     setup(props, {slots, emit, attrs}) {
@@ -78,7 +81,7 @@ export default defineComponent({
                     doValidate() {
                         // 可能返回promise但是这里一定是布尔值
                         // const valid = validatorRef.value.validate(props.schema, props.value) as boolean
-                        const result = validateFormData(validatorRef.value, props.value, props.schema, props.local)
+                        const result = validateFormData(validatorRef.value, props.value, props.schema, props.local, props.customValidate)
                         console.log('result', result);
                         errorSchemaRef.value = result.errorSchema
                         return result
