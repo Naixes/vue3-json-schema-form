@@ -7,15 +7,15 @@ import Ajv, { Options } from 'ajv'
 import {ErrorSchema, validateFormData} from './validator'
 
 interface ContextRef {
-    doValidate: () => {
+    doValidate: () => Promise<{
         errors: any[],
         valid: boolean,
-    }
+    }>
 }
 
 // 要使用ajv-errors需要传入{allErrors: true}
 const defaultAjvOptions: Options = {
-    allErrors: true
+    allErrors: true,
 }
 
 export default defineComponent({
@@ -74,17 +74,63 @@ export default defineComponent({
           })
         })
 
+        // 保存返回校验结果的方式
+        const validateResolveRef = ref()
+        // 记录每次校验的上下文
+        const validateIndex = ref(0)
+
+        // 监听数据变化
+        watch(() => props.value, () => {
+            // 在触发校验后执行
+            if(validateResolveRef.value) {
+                doValidate()
+            }
+        }, {deep: true})
+        async function doValidate() {
+            const index = validateIndex.value += 1
+            const result =  await validateFormData(
+                validatorRef.value,
+                props.value,
+                props.schema,
+                props.local,
+                props.customValidate
+            )
+            console.log('result', result);
+
+            // 判断当前是否最新的校验，不是直接返回
+            if(index !== validateIndex.value) return
+
+            errorSchemaRef.value = result.errorSchema
+            // 返回结果
+            validateResolveRef.value(result)
+            // 清空
+            validateResolveRef.value = undefined
+            // return result
+        }
+
         // 校验
         watch(() => props.contextRef, () => {
             if(props.contextRef) {
                 props.contextRef.value = {
                     doValidate() {
-                        // 可能返回promise但是这里一定是布尔值
-                        // const valid = validatorRef.value.validate(props.schema, props.value) as boolean
-                        const result = validateFormData(validatorRef.value, props.value, props.schema, props.local, props.customValidate)
-                        console.log('result', result);
-                        errorSchemaRef.value = result.errorSchema
-                        return result
+                        // // 可能返回promise但是这里一定是布尔值
+                        // // const valid = validatorRef.value.validate(props.schema, props.value) as boolean
+
+                        // const result = await validateFormData(
+                        //     validatorRef.value,
+                        //     props.value,
+                        //     props.schema,
+                        //     props.local,
+                        //     props.customValidate
+                        // )
+                        // console.log('result', result);
+                        // errorSchemaRef.value = result.errorSchema
+                        // return result
+
+                        return new Promise(resolve => {
+                            validateResolveRef.value = resolve
+                            doValidate()
+                        })
                     }
                 }
             }

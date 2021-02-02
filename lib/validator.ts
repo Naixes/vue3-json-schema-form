@@ -75,9 +75,12 @@ function transformErrors(
   if (errors === null || errors === undefined) return []
 
   return errors.map(({ message, dataPath, keyword, params, schemaPath }) => {
+    // 将/xxx改为xxx，否则toPath不能识别
+    const pathStr = dataPath ? dataPath.split('/')[1] : dataPath
+    
     return {
       name: keyword,
-      property: `${dataPath}`,
+      property: `${pathStr}`,
       message,
       params,
       schemaPath,
@@ -85,7 +88,7 @@ function transformErrors(
   })
 }
 
-export function validateFormData(
+export async function validateFormData(
   validator: Ajv,
   formData: any,
   schema: Schema,
@@ -133,7 +136,7 @@ export function validateFormData(
    * }
    */
   const proxy = createErrorProxy()
-  customValidate(formData, proxy)
+  await customValidate(formData, proxy)
   // 将proxy和现有的errorSchema进行合并
   const newErrorSchema = mergeObjects(errorSchema, proxy, true)
   return {
