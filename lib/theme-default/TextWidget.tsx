@@ -1,4 +1,4 @@
-import { defineComponent, nextTick } from 'vue'
+import { defineComponent } from 'vue'
 import {CommonWidgetPropsDefine, CommonWidgetType} from '../types'
 
 import {withFormItem} from './FormItem'

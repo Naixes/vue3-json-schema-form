@@ -191,6 +191,7 @@ export default defineComponent({
                         // 已改为从theme.tsx的ThemeProvider中获取
                         // theme={themeDefault as any}
                         schema={demo.schema}
+                        uiSchema={demo.uiSchema || {}}
                         onChange={handleChange}
                         value={demo.data}
                         contextRef={contextRef}

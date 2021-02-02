@@ -1,7 +1,7 @@
-import {defineComponent} from 'vue'
+import {computed, defineComponent} from 'vue'
 
 import {CommonWidgetNames, FieldPropsDefine} from '../types'
-import {getWidget} from '../theme'
+import {getWidgetRef} from '../theme'
 
 export default defineComponent({
     name: 'StringField',
@@ -14,10 +14,14 @@ export default defineComponent({
             props.onChange(v)
         }
 
-        const TextWidget = getWidget(CommonWidgetNames.TextWidget).value
+        const TextWidgetRef = computed(() => {
+            const widgetRef = getWidgetRef(CommonWidgetNames.TextWidget, props.uiSchema)
+            return widgetRef.value
+        })
 
         return () => {
             const {schema, rootSchema, errorSchema, ...rest} = props
+            const TextWidget = TextWidgetRef.value
             return (
                 // 这样写会报错，因为写了两个onChange被merge成了数组，这是vue编译器的默认行为，可以手动关闭
                 <TextWidget

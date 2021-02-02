@@ -4,7 +4,8 @@ import { createUseStyles } from 'vue-jss'
 import {FieldPropsDefine, Schema, SelectionWidgetNames} from '../types'
 import { useVJSFContext } from '../context'
 // import SelectionWidget from '../widgets/$Selection'
-import {getWidget} from '../theme'
+import {getWidgetRef} from '../theme'
+import { isObject } from 'lib/utils'
 
 /**
  * 三种情况
@@ -139,14 +140,14 @@ export default defineComponent({
             props.onChange(arrValue)
         }
 
-        const SelectionWidgetRef = getWidget(SelectionWidgetNames.SelectionWidget)
+        const SelectionWidgetRef = getWidgetRef(SelectionWidgetNames.SelectionWidget)
 
         return () => {
             const {SchemaItem} = context
             // 改为从theme.tsx中获取
             // const {SelectionWidget} = context.theme.widgets
             const SelectionWidget = SelectionWidgetRef.value
-            const {schema, rootSchema, value, errorSchema} = props
+            const {schema, rootSchema, value, errorSchema, uiSchema} = props
             // 判断是否是固定长度
             const isMultiType = Array.isArray(schema.items)
             // 是否有可选项
@@ -156,16 +157,22 @@ export default defineComponent({
                 // 固定长度数组
                 const items: Schema[] = schema.items as any
                 const arrValue = Array.isArray(value) ? value : []
-                return items.map((s: Schema, index: number) => (
-                    <SchemaItem
-                        rootSchema={rootSchema}
-                        schema={s}
-                        key={index}
-                        value={arrValue[index]}
-                        onChange={(v: any) => handleArrayItemChange(v, index)}
-                        errorSchema={errorSchema[index] || {}}
-                    ></SchemaItem>
-                ))
+                return items.map((s: Schema, index: number) => {
+                    const itemsUISchema = uiSchema.items
+                    const uiS = Array.isArray(itemsUISchema) ? itemsUISchema[index] || {} : itemsUISchema || {}
+                    return (
+
+                        <SchemaItem
+                            rootSchema={rootSchema}
+                            schema={s}
+                            uiSchema={uiS}
+                            key={index}
+                            value={arrValue[index]}
+                            onChange={(v: any) => handleArrayItemChange(v, index)}
+                            errorSchema={errorSchema[index] || {}}
+                        ></SchemaItem>
+                    )
+                })
             }else if(!isSelect) {
                 // 单一类型数组
                 const arrValue = Array.isArray(value) ? value : []
@@ -180,6 +187,7 @@ export default defineComponent({
                         <SchemaItem
                             rootSchema={rootSchema}
                             schema={schema.items as Schema}
+                            uiSchema={(uiSchema.items as any) || {}}
                             key={index}
                             value={v}
                             onChange={(v: any) => handleArrayItemChange(v, index)}

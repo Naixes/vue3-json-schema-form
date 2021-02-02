@@ -71,6 +71,10 @@ export const FieldPropsDefine = {
     errorSchema: {
         type: Object as PropType<ErrorSchema>,
         required: true
+    },
+    uiSchema: {
+        type: Object as PropType<UISchema>,
+        required: true
     }
 } as const
 
@@ -126,4 +130,13 @@ export interface Theme {
     [CommonWidgetNames.TextWidget]: CommonWidgetType,
     [CommonWidgetNames.NumberWidget]: CommonWidgetType,
   }
+}
+
+// 自定义组件
+export interface UISchema {
+  widget?: string | CommonWidgetType,
+  properties?: {
+    [key: string]: UISchema
+  },
+  items?: UISchema | UISchema[]
 }

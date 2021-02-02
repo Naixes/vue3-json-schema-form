@@ -1,7 +1,7 @@
 import {defineComponent} from 'vue'
 
 import {CommonWidgetNames, FieldPropsDefine} from '../types'
-import {getWidget} from '../theme'
+import {getWidgetRef} from '../theme'
 
 export default defineComponent({
     name: 'NumberField',
@@ -17,7 +17,7 @@ export default defineComponent({
             }
         }
 
-        const NumberWidget = getWidget(CommonWidgetNames.NumberWidget).value
+        const NumberWidget = getWidgetRef(CommonWidgetNames.NumberWidget).value
         console.log('NumberWidget', NumberWidget);
         
 
