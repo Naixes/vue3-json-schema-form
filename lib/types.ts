@@ -94,6 +94,9 @@ export const CommonWidgetPropsDefine = {
         type: Object as PropType<Schema>,
         required: true
     },
+    options: {
+      type: Object as PropType<{[key: string]: any}>
+    }
 } as const
 
 // 如果返回类型里面有很多any，是由于重载过多，可以试试以下写法
@@ -133,10 +136,13 @@ export interface Theme {
 }
 
 // 自定义组件
-export interface UISchema {
+export type UISchema = {
   widget?: string | CommonWidgetType,
   properties?: {
     [key: string]: UISchema
   },
-  items?: UISchema | UISchema[]
+  items?: UISchema | UISchema[],
+} & {
+  // 可以传递其他任意属性
+  [key: string]: any
 }

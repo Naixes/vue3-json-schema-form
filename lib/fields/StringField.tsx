@@ -19,6 +19,12 @@ export default defineComponent({
             return widgetRef.value
         })
 
+        // 获取UISchema中的options
+        const widgetOptionsRef = computed(() => {
+            const {widget, properties, items, ...rest} = props.uiSchema
+            return rest
+        })
+
         return () => {
             const {schema, rootSchema, errorSchema, ...rest} = props
             const TextWidget = TextWidgetRef.value
@@ -29,6 +35,7 @@ export default defineComponent({
                     errors={errorSchema.__errors}
                     onChange={handleChange}
                     schema={schema}
+                    options={widgetOptionsRef.value}
                 ></TextWidget>
                 // 已提取到theme-default中
                 // <input
