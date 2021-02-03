@@ -14,7 +14,8 @@ export default {
             pass1: {
                 title: 'pass1',
                 type: 'string',
-                minLength: 10,
+                // minLength: 10,
+                test: true,
             },
             pass2: {
                 title: 'pass2',

@@ -1637,7 +1637,7 @@ HOC，解耦
 
 ##### 自定义配置项
 
-自定义format
+#### 自定义format
 
 > 疑问：不知道为什么formContext.formatMapRef是formContext.formatMapRef.value的值
 >
@@ -1651,3 +1651,6 @@ HOC，解耦
 > console.log('obj2.a', obj2.a); // obj2.a RefImpl {_rawValue: 0, _shallow: false, __v_isRef: true, _value: 0}
 > ```
 
+#### 自定义keyword
+
+## 自动化构建

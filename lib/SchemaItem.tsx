@@ -6,6 +6,7 @@ import NumberField from './fields/NumberField'
 import ObjectField from './fields/ObjectField'
 import ArrayField from './fields/ArrayField'
 import {retrieveSchema} from './utils'
+import { useVJSFContext } from './context'
 
 // 负责根据类型分发给不同的组件
 export default defineComponent({
@@ -13,11 +14,13 @@ export default defineComponent({
     // 从SchemaItem组件开始，分发下去的所有组件props都是FieldPropsDefine
     props: FieldPropsDefine,
     setup(props, {slots, emit, attrs}) {
+        const formContext = useVJSFContext()
+
         // 处理schema
         // 会返回一个ref
         const retrievedSchemaRef = computed(() => {
             const {schema, rootSchema, value} = props
-            return retrieveSchema(schema, rootSchema, value)
+            return formContext.transformSchemaRef(retrieveSchema(schema, rootSchema, value))
         })
         return () => {
             const {schema} = props

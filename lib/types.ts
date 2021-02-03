@@ -1,7 +1,7 @@
 // 共用代码，可以在theme-default和core中通用
 
 import { DefineComponent, PropType } from "vue"
-import {FormatDefinition} from 'ajv'
+import {FormatDefinition, MacroKeywordDefinition} from 'ajv'
 import { ErrorSchema } from "./validator"
 
 export enum SchemaTypes {
@@ -153,4 +153,14 @@ export interface CustomFormat {
   name: string,
   definition: FormatDefinition<string>,
   component: CommonWidgetType,
+}
+
+// 自定义keyword关键字
+export interface CustomKeyword {
+  // 使用macro的方式
+  // keyword: string | string[];
+  // macro: MacroKeywordFunc;
+  // ...
+  definition: MacroKeywordDefinition,
+  transformSchema: (originSchema: Schema) => Schema
 }

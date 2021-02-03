@@ -1,6 +1,6 @@
-import { inject, Ref } from "vue"
+import { inject } from "vue"
 
-import { CommonFieldType, CommonWidgetType } from "./types"
+import { CommonFieldType, CommonWidgetType, Schema } from "./types"
 
 // 存储所有的 provide key
 export const SchemaFormContextKey = Symbol()
@@ -13,7 +13,8 @@ export function useVJSFContext() {
         SchemaItem: CommonFieldType,
         // 这个定义会报错因为响应式对象中的ref会被解包
         // formatMapRef: Ref<{[key: string]: CommonWidgetType}>
-        formatMapRef: {[key: string]: CommonWidgetType}
+        formatMapRef: {[key: string]: CommonWidgetType},
+        transformSchemaRef: (schema: Schema) => Schema
     } | undefined = inject(SchemaFormContextKey)
     
     if(!context) {

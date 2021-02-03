@@ -1,9 +1,9 @@
 import {computed, defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect} from 'vue'
 
-import {CommonWidgetType, CustomFormat, Schema, UISchema} from './types'
+import {CommonWidgetType, CustomFormat, CustomKeyword, Schema, UISchema} from './types'
 import SchemaItem from './SchemaItem'
 import {SchemaFormContextKey} from './context'
-import Ajv, { Options } from 'ajv'
+import Ajv, { KeywordDefinition, Options } from 'ajv'
 import {ErrorSchema, validateFormData} from './validator'
 
 interface ContextRef {
@@ -51,6 +51,9 @@ export default defineComponent({
         customFormats: {
             type: [Array, Object] as PropType<CustomFormat[] | CustomFormat>
         },
+        customKeywords: {
+            type: [Array, Object] as PropType<CustomKeyword[] | CustomKeyword>
+        },
         customValidate: {
             type: Function as PropType<(data: any, errors: any) => void>
         },
@@ -78,6 +81,15 @@ export default defineComponent({
                 // addFormat
                 customFormats.forEach(format => {
                     validatorRef.value.addFormat(format.name, format.definition)
+                })
+            }
+
+            //  在创建实例时增加 CustomKeyword
+            if(props.customKeywords) {
+                const customKeywords = Array.isArray(props.customKeywords) ? props.customKeywords : [props.customKeywords]
+                // addKeyword
+                customKeywords.forEach(keyword => {
+                    validatorRef.value.addKeyword(keyword.definition)
                 })
             }
         })
@@ -160,12 +172,32 @@ export default defineComponent({
             }
         })
 
+        const transformSchemaRef = computed(() => {
+            if(props.customKeywords) {
+                const customKeywords = Array.isArray(props.customKeywords) ? props.customKeywords : [props.customKeywords]
+    
+                return (schema: Schema) => {
+                    let newSchema = schema
+                    customKeywords.forEach(keyword => {
+                        // TODO：keyword.definition.keyword还可能是数组
+                        if((schema as any)[keyword.definition.keyword as string]) {
+                            newSchema = keyword.transformSchema(schema)
+                        }
+                    })
+                    return newSchema
+                }
+            }else {
+                return (s: Schema) => s
+            }
+        })
+
         const context: any = reactive({
             // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
             SchemaItem,
             // 向下提供theme，已改为从theme.tsx中获取
             // theme: props.theme,
             formatMapRef,
+            transformSchemaRef,
         })
 
         // 向子节点提供SchemaItem组件

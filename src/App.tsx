@@ -6,6 +6,7 @@ import demos from './demos'
 import SchemaForm, { ThemeProvider } from '../lib'
 import themeDefault from '../lib/theme-default/index'
 import customFormat from './plugins/customFormat'
+import customKeyword from './plugins/customKeyword'
 
 // TODO：在lib中export
 type Schema = any
@@ -198,6 +199,7 @@ export default defineComponent({
                         contextRef={contextRef}
                         customValidate={demo.customValidate}
                         customFormats={customFormat}
+                        customKeywords={customKeyword}
                       />
                     </ThemeProvider>
                     <button onClick={validateForm}>校验</button>
