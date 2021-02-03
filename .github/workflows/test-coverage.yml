@@ -30,7 +30,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       # 执行命令
       - run: npm install
-      - run: npm run test:cov
+      - run: npm run test:unit
         # 配置env，跑github ci时可以拿到
         env:
           CI: true
