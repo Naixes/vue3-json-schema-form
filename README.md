@@ -1639,5 +1639,15 @@ HOC，解耦
 
 自定义format
 
-
+> 疑问：不知道为什么formContext.formatMapRef是formContext.formatMapRef.value的值
+>
+> 查看源码后得知：响应化obj中的ref会被解包，感觉这样不太好，容易造成疑惑
+>
+> ```js
+> const a = ref(0)
+> const obj = reactive({a})
+> const obj2 = {a}
+> console.log('obj.a', obj.a); // obj.a 0
+> console.log('obj2.a', obj2.a); // obj2.a RefImpl {_rawValue: 0, _shallow: false, __v_isRef: true, _value: 0}
+> ```
 

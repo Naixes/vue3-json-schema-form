@@ -5,6 +5,7 @@ import MonacoEditor from './components/MonacoEditor'
 import demos from './demos'
 import SchemaForm, { ThemeProvider } from '../lib'
 import themeDefault from '../lib/theme-default/index'
+import customFormat from './plugins/customFormat'
 
 // TODO：在lib中export
 type Schema = any
@@ -196,6 +197,7 @@ export default defineComponent({
                         value={demo.data}
                         contextRef={contextRef}
                         customValidate={demo.customValidate}
+                        customFormats={customFormat}
                       />
                     </ThemeProvider>
                     <button onClick={validateForm}>校验</button>

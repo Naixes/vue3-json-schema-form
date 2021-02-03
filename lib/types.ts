@@ -1,6 +1,7 @@
 // 共用代码，可以在theme-default和core中通用
 
 import { DefineComponent, PropType } from "vue"
+import {FormatDefinition} from 'ajv'
 import { ErrorSchema } from "./validator"
 
 export enum SchemaTypes {
@@ -145,4 +146,11 @@ export type UISchema = {
 } & {
   // 可以传递其他任意属性
   [key: string]: any
+}
+
+// 自定义format
+export interface CustomFormat {
+  name: string,
+  definition: FormatDefinition<string>,
+  component: CommonWidgetType,
 }

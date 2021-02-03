@@ -1,6 +1,6 @@
-import {defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect} from 'vue'
+import {computed, defineComponent, PropType, provide, reactive, ref, Ref, shallowRef, watch, watchEffect} from 'vue'
 
-import {Schema, UISchema} from './types'
+import {CommonWidgetType, CustomFormat, Schema, UISchema} from './types'
 import SchemaItem from './SchemaItem'
 import {SchemaFormContextKey} from './context'
 import Ajv, { Options } from 'ajv'
@@ -48,6 +48,9 @@ export default defineComponent({
             type: String,
             default: 'zh'
         },
+        customFormats: {
+            type: [Array, Object] as PropType<CustomFormat[] | CustomFormat>
+        },
         customValidate: {
             type: Function as PropType<(data: any, errors: any) => void>
         },
@@ -60,21 +63,23 @@ export default defineComponent({
             props.onChange(v)
         }
 
-        const context: any = reactive({
-            // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
-            SchemaItem,
-            // 向下提供theme，已改为从theme.tsx中获取
-            // theme: props.theme,
-        })
-
         const errorSchemaRef: Ref<ErrorSchema> = shallowRef({})
 
         const validatorRef: Ref<Ajv> = shallowRef() as any
         watchEffect(() => {
-          validatorRef.value = new Ajv({
-            ...defaultAjvOptions,
-            ...props.ajvOptions,
-          })
+            validatorRef.value = new Ajv({
+                ...defaultAjvOptions,
+                ...props.ajvOptions,
+            })
+
+            //  在创建实例时增加 customFormat
+            if(props.customFormats) {
+                const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
+                // addFormat
+                customFormats.forEach(format => {
+                    validatorRef.value.addFormat(format.name, format.definition)
+                })
+            }
         })
 
         // 保存返回校验结果的方式
@@ -139,6 +144,28 @@ export default defineComponent({
             }
         }, {
             immediate: true,
+        })
+
+        // format和组件的对应关系
+        const formatMapRef = computed(() => {
+            if(props.customFormats) {
+                const customFormats = Array.isArray(props.customFormats) ? props.customFormats : [props.customFormats]
+            
+                return customFormats.reduce((result, format) => {
+                    result[format.name] = format.component
+                    return result
+                }, {} as {[key: string]: CommonWidgetType})
+            }else {
+                return {}
+            }
+        })
+
+        const context: any = reactive({
+            // 这里提供的是一个固定组件不会改变所以不使用reactive也可以
+            SchemaItem,
+            // 向下提供theme，已改为从theme.tsx中获取
+            // theme: props.theme,
+            formatMapRef,
         })
 
         // 向子节点提供SchemaItem组件

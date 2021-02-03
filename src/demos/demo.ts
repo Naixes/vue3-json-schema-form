@@ -6,7 +6,7 @@ export default {
     //     title: 'name',
     //     type: 'string',
     // },
-    // 测试自定义校验
+    // 测试自定义功能
     schema: {
         title: 'name',
         type: 'object',
@@ -20,6 +20,11 @@ export default {
                 title: 'pass2',
                 type: 'string',
             },
+            color: {
+                title: 'color',
+                type: 'string',
+                format: 'color',
+            }
         },
     },
     async customValidate(data: any, errors: any) {
