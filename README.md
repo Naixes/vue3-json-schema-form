@@ -1653,4 +1653,85 @@ HOC，解耦
 
 #### 自定义keyword
 
-## 自动化构建
+会有多余的默认提示的问题还未解决
+
+## 构建
+
+### 打标
+
+不同环境的构建
+
+版本号
+
+下载量
+
+大小
+
+测试覆盖率
+
+依赖
+
+网站：shields.io
+
+### 自动化构建
+
+#### CI
+
+持续集成
+
+- Travis CI
+
+- Circle CI
+
+- Github Action：github.com/features/actions
+
+#### 配置
+
+推送到仓库：
+
+在本地更新完成之后，`git remote add origin xxxx`，origin可以改成其他名字
+
+`git push origin 分支名`
+
+新建.github文件夹：
+
+```yml
+# .github/workflows/test-coverage.yml
+# workflows中的yml文件都是配置github自动化构建流程的
+
+#任务名称
+name: test-coverage
+
+# 何时触发任务
+on: [push]
+
+# 任务
+jobs:
+  build:
+  	# 运行环境，使用变量声明多个环境
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # 变量赋值，矩阵：在三个系统上都要运行这三个版本
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+	# 任务执行流程
+    steps:
+      # 继承其他action，github.com/actions/checkout
+      # checkout代码到系统上执行
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+      # 配置node环境
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # 执行命令
+      - run: npm install
+      - run: npm run test:cov
+        # 配置env，跑github ci时可以拿到
+        env:
+          CI: true
+```
+

@@ -1,0 +1,36 @@
+# workflows中的yml文件都是配置github自动化构建流程的
+
+#任务名称
+name: test-coverage
+
+# 何时触发任务
+on: [push]
+
+# 任务
+jobs:
+  build:
+  	# 运行环境，使用变量声明多个环境
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # 变量赋值，矩阵：在三个系统上都要运行这三个版本
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+	# 任务执行流程
+    steps:
+      # 继承其他action，github.com/actions/checkout
+      # checkout代码到系统上执行
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+      # 配置node环境
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # 执行命令
+      - run: npm install
+      - run: npm run test:cov
+        # 配置env，跑github ci时可以拿到
+        env:
+          CI: true
