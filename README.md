@@ -1,3 +1,5 @@
+![caverage](https://img.shields.io/codecov/c/gh/Naixes/vue3-json-schema-form)
+
 ## 开发日志
 
 ### 构建项目
@@ -1757,3 +1759,35 @@ codecov.io：分析代码覆盖率的网站
           fail_ci_if_error: true
 ```
 
+push代码
+
+打开链接：https://codecov.io/gh/Naixes/vue3-json-schema-form/branch/master
+
+获取图标：https://shields.io/category/coverage
+
+## 发布
+
+修改配置：
+
+```json
+"name": "vue3-json-schema-form",
+"version": "0.1.0",
+"private": false,
+"scripts": {
+    ...
+    "prepublishOnly": "npm run build"
+},
+// nrm ls 查看镜像的情况
+// 增加发布配置，不会影响安装包使用的下载源
+"publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+},
+// 发布的代码
+"files": [
+    "dist"
+],
+// import的文件
+"main": "dist/index.common.js",
+```
+
+npm publish
