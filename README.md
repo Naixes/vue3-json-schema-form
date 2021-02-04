@@ -1735,3 +1735,25 @@ jobs:
           CI: true
 ```
 
+#### codecov
+
+codecov.io：分析代码覆盖率的网站
+
+增加命令：`  "test:unit:cov": "vue-cli-service test:unit --coverage",`
+
+```yml
+...
+      - run: npm run test:unit:cov
+        env:
+          CI: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        # 参数
+        with:
+          flags: unittests
+          file: ./coverage/clover.xml
+          # 报错停止ci
+          fail_ci_if_error: true
+```
+

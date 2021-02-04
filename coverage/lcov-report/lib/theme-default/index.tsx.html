@@ -3,14 +3,14 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for lib/context.ts</title>
+    <title>Code coverage report for lib/theme-default/index.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="..\prettify.css" />
-    <link rel="stylesheet" href="..\base.css" />
+    <link rel="stylesheet" href="..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(..\sort-arrow-sprite.png);
+            background-image: url(..\..\sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -18,34 +18,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="..\index.html">All files</a> / <a href="index.html">lib</a> context.ts</h1>
+        <h1><a href="..\..\index.html">All files</a> / <a href="index.html">lib/theme-default</a> index.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -77,14 +77,8 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -97,37 +91,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { inject } from "vue"
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import SelectionWidget from './SelectionWidget'
+import TextWidget from './TextWidget'
+import NumberWidget from './NumberWidget'
 &nbsp;
-import { CommonFieldType, CommonWidgetType, Schema } from "./types"
+// 临时创建的CommonWidge解决ts定义问题
+// import { defineComponent } from 'vue'
+// import {CommonWidgetPropsDefine, CommonWidgetType} from '../types'
 &nbsp;
-// 存储所有的 provide key
-export const SchemaFormContextKey = Symbol()
+// const CommonWidge: CommonWidgetType = defineComponent({
+//     props: CommonWidgetPropsDefine,
+//     setup() {
+//         return () =&gt; null
+//     }
+// })
 &nbsp;
-// 获取SchemaForm提供的SchemaItem
-export function useVJSFContext() {
-    // theme已改为从theme.tsx中获取
-    // const context: {theme: Theme, SchemaItem: CommonFieldType} | undefined = inject(SchemaFormContextKey)
-    const context: {
-        SchemaItem: CommonFieldType,
-        // 这个定义会报错因为响应式对象中的ref会被解包
-        // formatMapRef: Ref&lt;{[key: string]: CommonWidgetType}&gt;
-        formatMapRef: {[key: string]: CommonWidgetType},
-        transformSchemaRef: (schema: Schema) =&gt; Schema
-    } | undefined = inject(SchemaFormContextKey)
-    
-    <span class="missing-if-branch" title="if path not taken" >I</span>if(!context) {
-<span class="cstat-no" title="statement not covered" >        throw E</span>rror('SchemaForm shuold bu used')
+export default {
+    widgets: {
+        SelectionWidget,
+        TextWidget,
+        NumberWidget,
     }
-    
-    return context
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -138,14 +129,14 @@ export function useVJSFContext() {
                 at Thu Feb 04 2021 10:18:50 GMT+0800 (GMT+08:00)
             </div>
         </div>
-        <script src="..\prettify.js"></script>
+        <script src="..\..\prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="..\sorter.js"></script>
-        <script src="..\block-navigation.js"></script>
+        <script src="..\..\sorter.js"></script>
+        <script src="..\..\block-navigation.js"></script>
     </body>
 </html>
     

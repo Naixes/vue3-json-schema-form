@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for lib/fields/ObjectField.tsx</title>
+    <title>Code coverage report for lib/widgets/$Selection.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="..\..\prettify.css" />
     <link rel="stylesheet" href="..\..\base.css" />
@@ -18,34 +18,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="..\..\index.html">All files</a> / <a href="index.html">lib/fields</a> ObjectField.tsx</h1>
+        <h1><a href="..\..\index.html">All files</a> / <a href="index.html">lib/widgets</a> $Selection.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">13.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>2/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/14</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">13.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>2/15</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,94 +101,100 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {DefineComponent, defineComponent, ExtractPropTypes, inject} from 'vue'
-&nbsp;
-import {CommonFieldType, FieldPropsDefine, Schema, SchemaTypes} from '../types'
-import { SchemaFormContextKey, useVJSFContext } from '../context'
-import { isObject } from '../../lib/utils'
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// 已经移动到theme文件夹中
+import { defineComponent, PropType, ref, watch } from "vue";
 &nbsp;
 export default defineComponent({
-    name: 'ObjectField',
-    props: FieldPropsDefine,
-    setup(props, {slots, emit, attrs}) {
-        
-        // 获取SchemaForm提供的SchemaItem
-        const context = useVJSFContext()
-&nbsp;
-        const handleObjectFieldChange = (k: string, v: any) =&gt; {
-            const value: any = isObject(props.value) ? props.value : <span class="branch-1 cbranch-no" title="branch not covered" >{}</span>
-&nbsp;
-            if(v === undefined) {
-                delete value[k]
-            }else {
-                value[k] = v
+    name: 'SelectionWidget',
+    props: {
+        value: {},
+        onChange: {
+            type: Function as PropType&lt;(v: any) =&gt; void&gt;,
+            required: true
+        },
+        options: {
+            type: Array as PropType&lt;{
+                key: string,
+                value: any
+            }[]&gt;,
+            required: true
+        },
+    },
+<span class="fstat-no" title="function not covered" >    setup(</span>props, {slots, emit, attrs}) {
+        const currentValueRef = <span class="cstat-no" title="statement not covered" >ref(p</span>rops.value)
+<span class="cstat-no" title="statement not covered" >        watch(c</span>urrentValueRef, <span class="fstat-no" title="function not covered" >(n</span>ewv, oldv) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if(newv !== oldv) {</span>
+<span class="cstat-no" title="statement not covered" >                props.</span>onChange(newv)
             }
-&nbsp;
-            props.onChange(value)
-        }
-&nbsp;
-        return () =&gt; {
-            const {schema, rootSchema, value, errorSchema, uiSchema} = props
-            const {SchemaItem} = context
-            const properties = schema.properties || <span class="branch-1 cbranch-no" title="branch not covered" >{}</span>
-            const currentValue: any = isObject(value) ? value : <span class="branch-1 cbranch-no" title="branch not covered" >{}</span>
-&nbsp;
-            return Object.keys(properties).map((k: string, index: number) =&gt; (
-                &lt;SchemaItem
-                    schema={properties[k]}
-                    rootSchema={rootSchema}
-                    uiSchema={uiSchema.properties ? <span class="branch-0 cbranch-no" title="branch not covered" >uiSchema.properties[k] || {} : {</span>}}
-                    value={currentValue[k]}
-                    key={index}
-                    onChange={(v: any) =&gt; handleObjectFieldChange(k, v)}
-                    errorSchema={errorSchema[k] || {}}
-                &gt;&lt;/SchemaItem&gt;
-            ))
+        })
+<span class="cstat-no" title="statement not covered" >        watch(</span>
+<span class="fstat-no" title="function not covered" >            () =&gt; <span class="cstat-no" title="statement not covered" >p</span>rops.value,</span>
+            (<span class="fstat-no" title="function not covered" >v) =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >                if(v !== currentValueRef.value) {</span>
+<span class="cstat-no" title="statement not covered" >                    currentValueRef.</span>value = v
+                }
+            }
+        )
+<span class="cstat-no" title="statement not covered" >        return <span class="fstat-no" title="function not covered" >(</span>) =&gt; </span>{
+            const {options} = <span class="cstat-no" title="statement not covered" >props</span>
+            // console.log('options', options);
+            
+<span class="cstat-no" title="statement not covered" >            return (</span>
+<span class="fstat-no" title="function not covered" >                &lt;select multiple={t</span>rue} v-model={<span class="cstat-no" title="statement not covered" >currentValueRef.value}&gt;</span>
+                    {options.map(<span class="fstat-no" title="function not covered" >opt </span>=&gt; (
+<span class="cstat-no" title="statement not covered" >                        &lt;option value={o</span>pt.value}&gt;{opt.key}&lt;/option&gt;
+                    ))}
+                &lt;/select&gt;
+            )
         }
     }
 })</pre></td></tr></table></pre>
